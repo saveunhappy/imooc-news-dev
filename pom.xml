@@ -11,6 +11,7 @@
         <module>imooc-news-dev-common</module>
         <module>immoc-news-dev-model</module>
         <module>imooc-news-dev-service-api</module>
+        <module>imooc-news-dev-service-user</module>
     </modules>
 
     <packaging>pom</packaging>
