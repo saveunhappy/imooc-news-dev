@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>imooc-news-dev-common</module>
+        <module>immo-news-dev-model</module>
     </modules>
 
     <packaging>pom</packaging>
