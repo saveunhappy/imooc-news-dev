@@ -1,5 +1,5 @@
-#server:
-#  port: 8003
+server:
+  port: 8103
 #
 #spring:
 #  redis:
