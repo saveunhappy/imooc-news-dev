@@ -1,13 +1,12 @@
 server:
   port: 8003
 
-#spring:
-#  redis:
-#    database: 0
-#    host: 192.168.1.201
-#    port: 6379
-#    password: 123456
-#
+spring:
+  redis:
+    database: 0
+    host: 47.100.235.50
+    port: 6379
+
 ## 在dev环境开启mybatis的日志打印
 #mybatis:
 #  configuration:

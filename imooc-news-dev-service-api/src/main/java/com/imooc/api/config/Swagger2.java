@@ -26,7 +26,7 @@ public class Swagger2 {
     public Docket createRestApi() {
 //        Predicate<RequestHandler> adminPredicate = RequestHandlerSelectors.basePackage("com.imooc.admin.controller");
 //        Predicate<RequestHandler> articlePredicate = RequestHandlerSelectors.basePackage("com.imooc.article.controller");
-        Predicate<RequestHandler> userPredicate = RequestHandlerSelectors.basePackage("com.imooc");
+        Predicate<RequestHandler> userPredicate = RequestHandlerSelectors.basePackage("com.imooc.user.controller");
 //        Predicate<RequestHandler> filesPredicate = RequestHandlerSelectors.basePackage("com.imooc.files.controller");
 
         return new Docket(DocumentationType.SWAGGER_2)  // 指定api类型为swagger2
@@ -41,13 +41,20 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("慕课新闻·自媒体接口api")                       // 文档页标题
-                .contact(new Contact("imooc",
-                        "https://www.imooc.com",
-                        "abc@imooc.com"))                   // 联系人信息
-                .description("专为慕课新闻·自媒体平台提供的api文档")      // 详细信息
-                .version("1.0.1")                               // 文档版本号
-                .termsOfServiceUrl("https://www.imooc.com")     // 网站地址
+                .title("Spring Cloud项目")
+                .description("实战项目")
+                .contact(new Contact("侯江涛","",""))
+                .version("1.0.0")
                 .build();
+//        return new ApiInfoBuilder()
+//                .title("慕课新闻·自媒体接口api")                       // 文档页标题
+//                .contact(new Contact("imooc",
+//                        "https://www.imooc.com",
+//                        "abc@imooc.com"))                   // 联系人信息
+//                .description("专为慕课新闻·自媒体平台提供的api文档")      // 详细信息
+//                .version("1.0.1")                               // 文档版本号
+//                .termsOfServiceUrl("https://www.imooc.com")     // 网站地址
+//                .build();
+
     }
 }
