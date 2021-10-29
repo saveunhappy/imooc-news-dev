@@ -3,16 +3,25 @@ package com.imooc.user.controller;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.user.PassportControllerApi;
 import com.imooc.grace.result.GraceJSONResult;
+import com.imooc.grace.result.ResponseStatusEnum;
+import com.imooc.pojo.bo.RegistLoginBO;
 import com.imooc.utils.IPUtil;
 import com.imooc.utils.MyInfo;
 import com.imooc.utils.SMSUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("passport")
@@ -35,4 +44,23 @@ public class PassportController extends BaseController implements PassportContro
         redis.set(MOBILE_SMSCODE + ":" + mobile,random,30 * 60);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult doLogin(@Valid RegistLoginBO registLoginBO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            Map<String, Object> map = getErrors(bindingResult);
+            return GraceJSONResult.errorMap(map);
+        }
+        String mobile = registLoginBO.getMobile();
+        String smsCode = registLoginBO.getSmsCode();
+        //验证验证码是否正确
+        String redisSMSCode = redis.get(MOBILE_SMSCODE + ":" + mobile);
+        if(StringUtils.isBlank(redisSMSCode) || !redisSMSCode.equalsIgnoreCase(smsCode)){
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.SMS_CODE_ERROR);
+        }
+
+
+        return GraceJSONResult.ok();
+    }
+
 }
