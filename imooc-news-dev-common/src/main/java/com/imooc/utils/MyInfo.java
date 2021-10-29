@@ -3,7 +3,7 @@ package com.imooc.utils;
 public class MyInfo {
 
     public static String getMobile() {
-        return "13027595769";
+        return "18039535216";
     }
 
 }
