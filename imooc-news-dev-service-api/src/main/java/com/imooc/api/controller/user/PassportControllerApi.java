@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Api(value = "用户注册登录",tags = {"用户注册登录的controller"})
@@ -24,5 +25,7 @@ public interface PassportControllerApi {
     @ApiOperation(value = "一键注册登录接口",notes = "一键注册登录接口",httpMethod = "POST")
     @PostMapping("/doLogin")
     GraceJSONResult doLogin(@RequestBody @Valid RegistLoginBO registLoginBO,
-                            BindingResult bindingResult);
+                            BindingResult bindingResult,
+                            HttpServletRequest request,
+                            HttpServletResponse response);
 }

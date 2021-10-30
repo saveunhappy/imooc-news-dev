@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("passport")
@@ -49,29 +51,44 @@ public class PassportController extends BaseController implements PassportContro
     }
 
     @Override
-    public GraceJSONResult doLogin(@Valid RegistLoginBO registLoginBO, BindingResult bindingResult) {
+    public GraceJSONResult doLogin(@Valid RegistLoginBO registLoginBO,
+                                   BindingResult bindingResult,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             Map<String, Object> map = getErrors(bindingResult);
             return GraceJSONResult.errorMap(map);
         }
         String mobile = registLoginBO.getMobile();
         String smsCode = registLoginBO.getSmsCode();
-        //验证验证码是否正确
+        //1.验证验证码是否正确
         String redisSMSCode = redis.get(MOBILE_SMSCODE + ":" + mobile);
         if (StringUtils.isBlank(redisSMSCode) || !redisSMSCode.equalsIgnoreCase(smsCode)) {
             return GraceJSONResult.errorCustom(ResponseStatusEnum.SMS_CODE_ERROR);
         }
-        //查询数据库,判断该用户注册
+        //2.查询数据库,判断该用户注册
         AppUser user = userService.queryMobileIsExist(mobile);
         if (user != null && user.getActiveStatus().equals(UserStatus.FROZEN.type)) {
             //如果用户不为空，并且状态为冻结，则直接抛出异常，禁止登陆
             return GraceJSONResult.errorCustom(ResponseStatusEnum.USER_FROZEN);
-        }else if(user == null){
+        } else if (user == null) {
             //如果用户没有注册过，则为null，需要注册信息入库
             user = userService.createUser(mobile);
         }
-        //最后把根据手机号查出来的用户信息给返回回来。
-        return GraceJSONResult.ok(user);
+        //3.保存分布式会话的相关操作
+        int userActiveStatus = user.getActiveStatus();
+        if (userActiveStatus != UserStatus.FROZEN.type) {
+            //保存token到redis
+            String uToken = UUID.randomUUID().toString();
+            redis.set(REDIS_USER_TOKEN + ":" + user.getId(), uToken);
+            setCookie(request,response,"utoken",uToken,COOKIE_MONTH);
+            setCookie(request,response,"uid",user.getId(),COOKIE_MONTH);
+        }
+        //用户登录或注册成功以后，需要删除redis中的短信验证码，验证码只能使用一次，用过后则作废
+        redis.del(MOBILE_SMSCODE + ":" + mobile);
+
+        //最后用户的状态给返回回去
+        return GraceJSONResult.ok(userActiveStatus);
     }
 
 }
