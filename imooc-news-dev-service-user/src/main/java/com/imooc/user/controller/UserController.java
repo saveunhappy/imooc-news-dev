@@ -1,10 +1,12 @@
 package com.imooc.user.controller;
 
+import com.imooc.api.BaseController;
 import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.api.controller.user.UserControllerApi;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AppUser;
+import com.imooc.pojo.bo.UpdateUserInfoBO;
 import com.imooc.pojo.vo.UserAccountInfoVO;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.RedisOperator;
@@ -12,13 +14,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
-public class UserController implements UserControllerApi {
+public class UserController extends BaseController implements UserControllerApi {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Resource
     private UserService userService;
@@ -36,6 +41,19 @@ public class UserController implements UserControllerApi {
 
         return GraceJSONResult.ok(accountInfoVO);
     }
+
+    @Override
+    public GraceJSONResult updateUserInfo(@Valid UpdateUserInfoBO updateUserInfoBO,BindingResult bindingResult) {
+        //0.校验BO
+        if (bindingResult.hasErrors()) {
+            Map<String, Object> map = getErrors(bindingResult);
+            return GraceJSONResult.errorMap(map);
+        }
+        System.out.println("11111");
+        //1.执行更新操作
+        return GraceJSONResult.ok();
+    }
+
     private AppUser getUser(String userId){
         //TODO 本方法后序公用，并且扩展
         return userService.getUser(userId);
