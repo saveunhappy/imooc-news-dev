@@ -24,18 +24,6 @@ public class BaseController {
     public static final Integer COOKIE_MONTH = 30 * 24 *60 *60;
     @Value("${website.domain-name}")
     public String DOMAIN_NAME;
-    public Map<String, Object> getErrors(BindingResult result) {
-        Map<String, Object> map = new HashMap<>();
-        List<FieldError> errorList = result.getFieldErrors();
-        for (FieldError error : errorList) {
-            //发送验证码错误的时候对应的某个属性
-            String field = error.getField();
-            //验证的错误消息
-            String message = error.getDefaultMessage();
-            map.put(field, message);
-        }
-        return map;
-    }
 
     public void setCookie(HttpServletRequest request,
                           HttpServletResponse response,
