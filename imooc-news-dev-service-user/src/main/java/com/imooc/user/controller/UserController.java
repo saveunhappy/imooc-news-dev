@@ -7,6 +7,7 @@ import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
+import com.imooc.pojo.vo.AppUserVO;
 import com.imooc.pojo.vo.UserAccountInfoVO;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.RedisOperator;
@@ -27,6 +28,21 @@ public class UserController extends BaseController implements UserControllerApi 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Resource
     private UserService userService;
+
+    @Override
+    public GraceJSONResult getUserInfo(String userId) {
+        //0.判断用户参数不能为空
+        if(StringUtils.isBlank(userId)){
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.UN_LOGIN);
+        }
+        //1.根据userId查询用户的信息
+        AppUser user = getUser(userId);
+        AppUserVO userVO = new AppUserVO();
+        BeanUtils.copyProperties(user,userVO);
+        return GraceJSONResult.ok(userVO);
+
+    }
+
     @Override
     public GraceJSONResult getAccountInfo(String userId) {
         //0.判断用户参数不能为空
@@ -45,6 +61,7 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     public GraceJSONResult updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
         //1.执行更新操作
+        userService.updateUserInfo(updateUserInfoBO);
         return GraceJSONResult.ok();
     }
 
