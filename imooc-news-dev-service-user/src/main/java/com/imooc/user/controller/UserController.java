@@ -43,13 +43,7 @@ public class UserController extends BaseController implements UserControllerApi 
     }
 
     @Override
-    public GraceJSONResult updateUserInfo(@Valid UpdateUserInfoBO updateUserInfoBO,BindingResult bindingResult) {
-        //0.校验BO
-        if (bindingResult.hasErrors()) {
-            Map<String, Object> map = getErrors(bindingResult);
-            return GraceJSONResult.errorMap(map);
-        }
-        System.out.println("11111");
+    public GraceJSONResult updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
         //1.执行更新操作
         return GraceJSONResult.ok();
     }
