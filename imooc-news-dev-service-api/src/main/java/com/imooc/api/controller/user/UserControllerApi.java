@@ -23,6 +23,6 @@ public interface UserControllerApi {
 
     @ApiOperation(value = "修改/完善用户信息",notes = "修改/完善用户信息",httpMethod = "POST")
     @PostMapping("/updateUserInfo")
-    GraceJSONResult updateUserInfo(@RequestBody @Valid UpdateUserInfoBO updateUserInfoBO,BindingResult bindingResult);
+    GraceJSONResult updateUserInfo(@Valid @RequestBody UpdateUserInfoBO updateUserInfoBO);
 
 }
