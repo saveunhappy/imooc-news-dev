@@ -349,4 +349,5 @@ public class AppUser {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
 }
