@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("passport")
 public class PassportController extends BaseController implements PassportControllerApi {
     private static final Logger logger = LoggerFactory.getLogger(PassportController.class);
     @Resource
