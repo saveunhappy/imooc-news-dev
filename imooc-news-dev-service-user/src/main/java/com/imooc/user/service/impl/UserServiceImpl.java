@@ -12,6 +12,8 @@ import com.imooc.user.service.UserService;
 import com.imooc.utils.DateUtil;
 import com.imooc.utils.DesensitizationUtil;
 import com.imooc.org.n3r.idworker.Sid;
+import com.imooc.utils.JsonUtils;
+import com.imooc.utils.RedisOperator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,10 @@ public class UserServiceImpl implements UserService {
     public AppUserMapper appUserMapper;
     @Resource
     public Sid sid;
+    @Resource
+    public RedisOperator redis;
+
+    public static final String REDIS_USER_INFO = "redis_user_info";
     private static final String USER_FACE0 = "http://122.152.205.72:88/group1/M00/00/05/CpoxxFw_8_qAIlFXAAAcIhVPdSg994.png";
     private static final String USER_FACE1 = "http://122.152.205.72:88/group1/M00/00/05/CpoxxF6ZUySASMbOAABBAXhjY0Y649.png";
     private static final String USER_FACE2 = "http://122.152.205.72:88/group1/M00/00/05/CpoxxF6ZUx6ANoEMAABTntpyjOo395.png";
@@ -66,13 +72,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
+        String userId = updateUserInfoBO.getId();
+
         AppUser userInfo = new AppUser();
         BeanUtils.copyProperties(updateUserInfoBO, userInfo);
         userInfo.setUpdatedTime(new Date());
         userInfo.setActiveStatus(UserStatus.ACTIVE.type);
         int result = appUserMapper.updateByPrimaryKeySelective(userInfo);
+
         if (result != 1) {
             GraceException.display(ResponseStatusEnum.USER_UPDATE_ERROR);
         }
+        //再次查询用户的最新信息,放入redis中
+        AppUser user = getUser(userId);
+        redis.set(REDIS_USER_INFO + ":"+userId, JsonUtils.objectToJson(user));
     }
 }

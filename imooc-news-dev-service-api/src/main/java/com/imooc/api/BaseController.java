@@ -1,26 +1,19 @@
 package com.imooc.api;
-
-
 import com.imooc.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class BaseController {
     @Resource
     public RedisOperator redis;
     public static final String MOBILE_SMSCODE = "mobile:smscode";
     public static final String REDIS_USER_TOKEN = "redis_user_token";
+    public static final String REDIS_USER_INFO = "redis_user_info";
     public static final Integer COOKIE_MONTH = 30 * 24 *60 *60;
     @Value("${website.domain-name}")
     public String DOMAIN_NAME;

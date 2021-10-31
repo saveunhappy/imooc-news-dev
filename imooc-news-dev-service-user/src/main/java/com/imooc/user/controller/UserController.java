@@ -10,6 +10,7 @@ import com.imooc.pojo.bo.UpdateUserInfoBO;
 import com.imooc.pojo.vo.AppUserVO;
 import com.imooc.pojo.vo.UserAccountInfoVO;
 import com.imooc.user.service.UserService;
+import com.imooc.utils.JsonUtils;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -61,12 +62,20 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     public GraceJSONResult updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
         //1.执行更新操作
+
         userService.updateUserInfo(updateUserInfoBO);
         return GraceJSONResult.ok();
     }
 
     private AppUser getUser(String userId){
-        //TODO 本方法后序公用，并且扩展
-        return userService.getUser(userId);
+        String userJson = redis.get(REDIS_USER_INFO + ":" + userId);
+        AppUser user = null;
+        if(StringUtils.isNotBlank(userJson)){
+            user = JsonUtils.jsonToPojo(userJson,AppUser.class);
+        }else {
+            user = userService.getUser(userId);
+            redis.set(REDIS_USER_INFO+":"+userId,JsonUtils.objectToJson(user));
+        }
+        return user;
     }
 }
