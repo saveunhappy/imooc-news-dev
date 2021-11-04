@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class UserTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
-    @Resource
-    public RedisOperator redis;
-    public static final String MOBILE_SMSCODE = "mobile:smscode";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

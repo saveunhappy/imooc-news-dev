@@ -10,9 +10,9 @@ import javax.annotation.Resource;
 
 public class BaseInterceptor {
     @Resource
-    private RedisOperator redis;
+    public RedisOperator redis;
     public static final String REDIS_USER_TOKEN = "redis_user_token";
-
+    public static final String REDIS_USER_INFO = "redis_user_info";
     public boolean verifyUserIdToken(String id,
                                      String token,
                                      String redisKeyPrefix){
