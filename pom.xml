@@ -12,6 +12,7 @@
         <module>immoc-news-dev-model</module>
         <module>imooc-news-dev-service-api</module>
         <module>imooc-news-dev-service-user</module>
+        <module>imooc-news-dev-service-files</module>
     </modules>
 
     <packaging>pom</packaging>
