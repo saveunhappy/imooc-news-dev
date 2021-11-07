@@ -1,6 +1,7 @@
 package com.imooc.exception;
 
 import com.imooc.grace.result.GraceJSONResult;
+import com.imooc.grace.result.ResponseStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,11 @@ public class GraceExceptionHandler {
     public GraceJSONResult validExceptionHandler(MethodArgumentNotValidException e) {
         Map<String, Object> map = getErrors(e.getBindingResult());
         return GraceJSONResult.errorMap(map);
+    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseBody
+    public GraceJSONResult returnMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_MAX_SIZE_ERROR);
     }
 
     @ExceptionHandler(value = BindException.class)
