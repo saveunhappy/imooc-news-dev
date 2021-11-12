@@ -8,7 +8,9 @@ import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AdminUser;
 import com.imooc.pojo.bo.AdminLoginBO;
+import com.imooc.pojo.bo.NewAdminBO;
 import com.imooc.utils.RedisOperator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,6 +50,30 @@ public class AdminMngController extends BaseController implements AdminMngContro
         checkAdminExist(username);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult addNewAdmin(NewAdminBO newAdminBO, HttpServletRequest request, HttpServletResponse response) {
+        //0. TODO 验证BO中的用户名和密码不为空
+        //1.base64不为空，则代表需要人脸入库，否则需要用户输入密码和确认密码
+        if(StringUtils.isBlank(newAdminBO.getImg64())){
+            if (StringUtils.isBlank(newAdminBO.getPassword())
+                    || StringUtils.isBlank(newAdminBO.getConfirmPassword())) {
+                return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_PASSWORD_NULL_ERROR);
+            }
+        }
+        //2.密码不为空则两次密码必须一致
+        if(StringUtils.isNotBlank(newAdminBO.getPassword())){
+            if(!newAdminBO.getPassword().equalsIgnoreCase(newAdminBO.getConfirmPassword())){
+                return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_PASSWORD_ERROR);
+            }
+        }
+        //校验用户名唯一
+        checkAdminExist(newAdminBO.getUsername());
+
+        adminUserService.addNewAdminUser(newAdminBO);
+        return GraceJSONResult.ok();
+    }
+
     private void checkAdminExist(String username){
         AdminUser admin = adminUserService.queryAdminUserByUsername(username);
         if(admin != null){

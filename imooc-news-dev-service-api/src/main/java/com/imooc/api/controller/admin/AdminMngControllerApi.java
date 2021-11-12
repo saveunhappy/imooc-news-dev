@@ -2,6 +2,7 @@ package com.imooc.api.controller.admin;
 
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.bo.AdminLoginBO;
+import com.imooc.pojo.bo.NewAdminBO;
 import com.imooc.pojo.bo.RegistLoginBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,4 +26,10 @@ public interface AdminMngControllerApi {
     @ApiOperation(value = "查询admin用户是否存在",notes = "查询admin用户是否存在",httpMethod = "POST")
     @PostMapping("/adminIsExist")
     GraceJSONResult adminIsExist(@RequestParam String username);
+
+    @ApiOperation(value = "创建admin",notes = "创建admin",httpMethod = "POST")
+    @PostMapping("/addNewAdmin")
+    GraceJSONResult addNewAdmin(@RequestBody NewAdminBO newAdminBO,
+                               HttpServletRequest request,
+                               HttpServletResponse response);
 }
