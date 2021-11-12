@@ -22,4 +22,7 @@ public interface AdminMngControllerApi {
                             HttpServletRequest request,
                             HttpServletResponse response);
 
+    @ApiOperation(value = "查询admin用户是否存在",notes = "查询admin用户是否存在",httpMethod = "POST")
+    @PostMapping("/adminIsExist")
+    GraceJSONResult adminIsExist(@RequestParam String username);
 }

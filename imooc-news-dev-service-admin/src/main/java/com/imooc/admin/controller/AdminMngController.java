@@ -3,6 +3,7 @@ package com.imooc.admin.controller;
 import com.imooc.admin.service.AdminUserService;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.admin.AdminMngControllerApi;
+import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AdminUser;
@@ -39,6 +40,18 @@ public class AdminMngController extends BaseController implements AdminMngContro
             return GraceJSONResult.ok();
         }else {
             return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
+        }
+    }
+
+    @Override
+    public GraceJSONResult adminIsExist(String username) {
+        checkAdminExist(username);
+        return GraceJSONResult.ok();
+    }
+    private void checkAdminExist(String username){
+        AdminUser admin = adminUserService.queryAdminUserByUsername(username);
+        if(admin != null){
+            GraceException.display(ResponseStatusEnum.ADMIN_USERNAME_EXIST_ERROR);
         }
     }
 
