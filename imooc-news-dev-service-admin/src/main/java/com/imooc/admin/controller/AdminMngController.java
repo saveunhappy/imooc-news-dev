@@ -9,6 +9,7 @@ import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AdminUser;
 import com.imooc.pojo.bo.AdminLoginBO;
 import com.imooc.pojo.bo.NewAdminBO;
+import com.imooc.utils.PagedGridResult;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -102,7 +103,7 @@ public class AdminMngController extends BaseController implements AdminMngContro
         if(pageSize == null){
             pageSize = COMMON_PAGE_SIZE;
         }
-        adminUserService.queryAdminList(page,pageSize);
-        return GraceJSONResult.ok();
+        PagedGridResult result = adminUserService.queryAdminList(page, pageSize);
+        return GraceJSONResult.ok(result);
     }
 }

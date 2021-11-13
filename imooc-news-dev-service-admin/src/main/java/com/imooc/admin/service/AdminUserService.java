@@ -2,6 +2,7 @@ package com.imooc.admin.service;
 
 import com.imooc.pojo.AdminUser;
 import com.imooc.pojo.bo.NewAdminBO;
+import com.imooc.utils.PagedGridResult;
 
 public interface AdminUserService {
     /**
@@ -11,5 +12,5 @@ public interface AdminUserService {
 
     void addNewAdminUser(NewAdminBO newAdminBO);
 
-    void queryAdminList(Integer page, Integer pageSize);
+    PagedGridResult queryAdminList(Integer page, Integer pageSize);
 }
