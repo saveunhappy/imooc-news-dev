@@ -6,6 +6,7 @@ import com.imooc.pojo.bo.NewAdminBO;
 import com.imooc.pojo.bo.RegistLoginBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,4 +33,9 @@ public interface AdminMngControllerApi {
     GraceJSONResult addNewAdmin(@RequestBody NewAdminBO newAdminBO,
                                HttpServletRequest request,
                                HttpServletResponse response);
+
+    @ApiOperation(value = "查询admin列表",notes = "查询admin列表",httpMethod = "POST")
+    @PostMapping("/getAdminList")
+    GraceJSONResult getAdminList(@ApiParam(name = "page",value = "第几页")@RequestParam Integer page,
+    @ApiParam(name = "pageSize",value = "每页显示多少条")@RequestParam Integer pageSize);
 }

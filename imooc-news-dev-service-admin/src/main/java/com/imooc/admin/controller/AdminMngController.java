@@ -92,6 +92,17 @@ public class AdminMngController extends BaseController implements AdminMngContro
         setCookie(request,response,"atoken",token,COOKIE_MONTH);
         setCookie(request,response,"aid",admin.getId(),COOKIE_MONTH);
         setCookie(request,response,"aname",admin.getAdminName(),COOKIE_MONTH);
+    }
 
+    @Override
+    public GraceJSONResult getAdminList(Integer page, Integer pageSize) {
+        if(page == null){
+            page = COMMON_START_PAGE;
+        }
+        if(pageSize == null){
+            pageSize = COMMON_PAGE_SIZE;
+        }
+        adminUserService.queryAdminList(page,pageSize);
+        return GraceJSONResult.ok();
     }
 }

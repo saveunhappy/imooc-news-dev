@@ -10,4 +10,6 @@ public interface AdminUserService {
     AdminUser queryAdminUserByUsername(String username);
 
     void addNewAdminUser(NewAdminBO newAdminBO);
+
+    void queryAdminList(Integer page, Integer pageSize);
 }
