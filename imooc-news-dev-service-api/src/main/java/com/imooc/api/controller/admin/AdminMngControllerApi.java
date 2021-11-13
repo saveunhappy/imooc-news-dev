@@ -38,4 +38,11 @@ public interface AdminMngControllerApi {
     @PostMapping("/getAdminList")
     GraceJSONResult getAdminList(@ApiParam(name = "page",value = "第几页")@RequestParam Integer page,
     @ApiParam(name = "pageSize",value = "每页显示多少条")@RequestParam Integer pageSize);
+
+
+    @ApiOperation(value = "admin退出登录",notes = "admin退出登录",httpMethod = "POST")
+    @PostMapping("/adminLogout")
+    GraceJSONResult adminLogout(@RequestParam String adminId,
+                                HttpServletRequest request,
+                                HttpServletResponse response );
 }

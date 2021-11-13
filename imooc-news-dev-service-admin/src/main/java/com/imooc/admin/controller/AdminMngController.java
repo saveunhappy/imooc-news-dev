@@ -106,4 +106,16 @@ public class AdminMngController extends BaseController implements AdminMngContro
         PagedGridResult result = adminUserService.queryAdminList(page, pageSize);
         return GraceJSONResult.ok(result);
     }
+
+    @Override
+    public GraceJSONResult adminLogout(String adminId, HttpServletRequest request, HttpServletResponse response) {
+        //从redis中删除admin的会话token
+        redis.del(REDIS_ADMIN_TOKEN + ":" + adminId);
+        //从cookie中清理admin登录的相关信息
+//        deleteCookie(request,response,"atoken");
+//        deleteCookie(request,response,"aid");
+//        deleteCookie(request,response,"aname");
+        deleteCookie(request,response,COOKIENAMES);
+        return GraceJSONResult.ok();
+    }
 }
