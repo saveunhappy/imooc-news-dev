@@ -33,7 +33,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/user/getAccountInfo");
         registry.addInterceptor(adminTokenInterceptor)
                 .addPathPatterns("/adminMng/adminIsExist")
-                .addPathPatterns("/adminMng/addNewAdmin");
-//                .addPathPatterns("/adminMng/getAdminList");
+                .addPathPatterns("/adminMng/addNewAdmin")
+                .addPathPatterns("/adminMng/getAdminList");
     }
 }
