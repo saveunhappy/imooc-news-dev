@@ -5,6 +5,7 @@ import com.imooc.api.controller.files.FileUploaderControllerApi;
 import com.imooc.files.service.UploaderService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
+import com.imooc.pojo.bo.NewAdminBO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,12 @@ public class FileUploaderController implements FileUploaderControllerApi {
         }
         return GraceJSONResult.ok(finalpath);
     }
+
+    @Override
+    public GraceJSONResult uploadToGridFS(NewAdminBO newAdminBO) throws Exception {
+        return null;
+    }
+
     private static String getFileExtention(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
