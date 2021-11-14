@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(value = "文件上传的Controller",tags = {"文件上传的Controller"})
 @RequestMapping("fs")
 public interface FileUploaderControllerApi {
-    @ApiOperation(value = "上传用户头像",notes = "上传用户头像",httpMethod = "C")
+    @ApiOperation(value = "上传用户头像",notes = "上传用户头像",httpMethod = "POST")
     @PostMapping("/uploadFace")
     GraceJSONResult uploadFace(@RequestParam String userId, MultipartFile file)throws Exception;
 
