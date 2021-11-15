@@ -12,8 +12,10 @@ import com.imooc.pojo.bo.NewAdminBO;
 import com.imooc.utils.PagedGridResult;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +28,8 @@ public class AdminMngController extends BaseController implements AdminMngContro
     private AdminUserService adminUserService;
     @Resource
     private RedisOperator redis;
-
+    @Resource
+    private RestTemplate restTemplate;
 
     @Override
     public GraceJSONResult adminLogin(@Valid AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) {
@@ -136,6 +139,11 @@ public class AdminMngController extends BaseController implements AdminMngContro
         String adminFaceId = adminUser.getFaceId();
 
         //2.请求文件服务，获取人脸数据的base64数据
+        String fileServerExecute = "http://files.imoocnews.com:8004/fs/readFace64InGridFS?faceId=" + adminFaceId;
+        ResponseEntity<GraceJSONResult> responseEntity = restTemplate.getForEntity(fileServerExecute, GraceJSONResult.class);
+        GraceJSONResult body = responseEntity.getBody();
+        assert body != null;
+        String base64DB = (String)body.getData();
 
         //3.
 
