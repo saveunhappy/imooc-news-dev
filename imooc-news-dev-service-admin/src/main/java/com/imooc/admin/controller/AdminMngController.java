@@ -3,12 +3,15 @@ package com.imooc.admin.controller;
 import com.imooc.admin.service.AdminUserService;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.admin.AdminMngControllerApi;
+import com.imooc.enums.FaceVerifyType;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.AdminUser;
 import com.imooc.pojo.bo.AdminLoginBO;
 import com.imooc.pojo.bo.NewAdminBO;
+import com.imooc.utils.CompareFaceUtils;
+import com.imooc.utils.FaceVerifyUtils;
 import com.imooc.utils.PagedGridResult;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +33,10 @@ public class AdminMngController extends BaseController implements AdminMngContro
     private RedisOperator redis;
     @Resource
     private RestTemplate restTemplate;
-
+    @Resource
+    private FaceVerifyUtils faceVerifyUtils;
+    @Resource
+    private CompareFaceUtils compareFaceUtils;
     @Override
     public GraceJSONResult adminLogin(@Valid AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) {
 
@@ -145,9 +151,18 @@ public class AdminMngController extends BaseController implements AdminMngContro
         assert body != null;
         String base64DB = (String)body.getData();
 
-        //3.
+        //3.调用阿里ai进行人脸对比识别，判断可信度，从而实现人脸登录
+        compareFaceUtils.faceVerify(tempFace64,base64DB,60F);
+//        boolean result = faceVerifyUtils.faceVerify(
+//                FaceVerifyType.BASE64.type,
+//                tempFace64,
+//                base64DB, 60);
+//        if(!result){
+//            return GraceJSONResult.errorCustom(ResponseStatusEnum.FACE_VERIFY_LOGIN_ERROR);
+//        }
 
-        //4.
-        return null;
+        //4.admin登录后的数据设置，redis与token
+        doLoginSettings(adminUser,request,response);
+        return GraceJSONResult.ok();
     }
 }

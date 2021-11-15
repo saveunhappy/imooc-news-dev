@@ -107,5 +107,17 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.51</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-facebody</artifactId>
+            <version>1.2.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>facebody20191230</artifactId>
+            <version>1.0.19</version>
+        </dependency>
     </dependencies>
 </project>
