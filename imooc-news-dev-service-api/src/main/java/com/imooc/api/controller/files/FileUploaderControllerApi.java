@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Api(value = "文件上传的Controller",tags = {"文件上传的Controller"})
 @RequestMapping("fs")
 public interface FileUploaderControllerApi {
@@ -19,4 +22,14 @@ public interface FileUploaderControllerApi {
      */
     @PostMapping("/uploadToGridFS")
     GraceJSONResult uploadToGridFS(@RequestBody NewAdminBO newAdminBO)throws Exception;
+
+    @GetMapping("/readInGridFS")
+    void readInGridFS(String faceId,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)throws Exception;
+    @GetMapping("/readFace64InGridFS")
+    GraceJSONResult readFace64InGridFS(String faceId,
+                      HttpServletRequest request,
+                      HttpServletResponse response)throws Exception;
+
 }

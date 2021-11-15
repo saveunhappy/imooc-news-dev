@@ -118,4 +118,28 @@ public class AdminMngController extends BaseController implements AdminMngContro
         deleteCookie(request,response,COOKIENAMES);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult adminFaceLogin(AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) {
+        //0.判断用户名和人脸信息不能为空
+        String username = adminLoginBO.getUsername();
+        if(StringUtils.isBlank(username)){
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_USERNAME_NULL_ERROR);
+        }
+        String tempFace64 = adminLoginBO.getImg64();
+        if(StringUtils.isBlank(tempFace64)){
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_FACE_NULL_ERROR);
+        }
+
+        //1.从数据库中查询出FaceId
+        AdminUser adminUser = adminUserService.queryAdminUserByUsername(username);
+        String adminFaceId = adminUser.getFaceId();
+
+        //2.请求文件服务，获取人脸数据的base64数据
+
+        //3.
+
+        //4.
+        return null;
+    }
 }

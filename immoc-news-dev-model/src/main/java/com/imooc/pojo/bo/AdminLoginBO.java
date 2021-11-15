@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 public class AdminLoginBO {
     @NotEmpty(message = "账号不能为空")
     private String username;
-    @NotEmpty(message = "密码不能为空")
+    //@NotEmpty(message = "密码不能为空")
     private String password;
     private String img64;
 
