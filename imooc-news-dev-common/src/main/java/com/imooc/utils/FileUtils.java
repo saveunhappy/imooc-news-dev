@@ -6,6 +6,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.Base64;
 
 public class FileUtils {
 
@@ -88,5 +89,27 @@ public class FileUtils {
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(fileData);
     }
+    public static String encodeBase64(File filePath) {
 
+        String encodedBase64 = null;
+        byte[] bytes = null;
+        try (FileInputStream fis = new FileInputStream(filePath)) {
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int read = -1;
+                while ((read = fis.read(buffer)) != -1) {
+                    baos.write(buffer, 0, read);
+                }
+                bytes = baos.toByteArray();
+            } catch (IOException exp) {
+                exp.printStackTrace();
+            }
+            encodedBase64 = Base64.getEncoder().encodeToString(bytes);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encodedBase64;
+    }
 }

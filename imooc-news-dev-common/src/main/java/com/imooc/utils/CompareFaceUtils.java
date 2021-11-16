@@ -15,16 +15,20 @@ import com.google.gson.Gson;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.utils.extend.AliyunResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Component
 public class CompareFaceUtils {
+    private static final Logger logger = LoggerFactory.getLogger(CompareFaceUtils.class);
     @Resource
     private AliyunResource aliyunResource;
     public boolean faceVerify(String face1, String face2, Float targetConfidence) {
-        boolean result = true;
+        boolean result = false;
         DefaultProfile profile = DefaultProfile.getProfile(
                 "cn-shanghai",
                 aliyunResource.getAccessKeyID(),
@@ -48,11 +52,20 @@ public class CompareFaceUtils {
         try {
             CompareFaceResponse response = client.getAcsResponse(request);
             System.out.println(new Gson().toJson(response));
+            Gson gson = new Gson();
+            String json = gson.toJson(response);
+            Map<String, Object> map = JsonUtils.jsonToPojo(json, Map.class);
+            Map<String, String> data = (Map<String, String>) map.get("data");
+            Object confidenceStr = data.get("confidence");
+            Double responseConfidence = (Double)confidenceStr;
+            logger.info("人脸对比结果：{}", responseConfidence);
+
+//        System.out.println(response.toString());
+//        System.out.println(map.toString());
+            result = responseConfidence > targetConfidence;
         } catch (ServerException e) {
-            result = false;
             e.printStackTrace();
         } catch (ClientException e) {
-            result = false;
             System.out.println("ErrCode:" + e.getErrCode());
             System.out.println("ErrMsg:" + e.getErrMsg());
             System.out.println("RequestId:" + e.getRequestId());

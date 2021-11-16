@@ -1,5 +1,6 @@
 package com.imooc.files.controller;
 
+import com.google.common.io.Files;
 import com.imooc.exception.GraceException;
 import com.imooc.files.resource.FileResource;
 import com.imooc.api.controller.files.FileUploaderControllerApi;
@@ -39,15 +40,17 @@ public class FileUploaderController implements FileUploaderControllerApi {
         String path = "";
         if (file != null) {
             //获取文件上传的名称
-            String filename = file.getOriginalFilename();
-            if (StringUtils.isNotBlank(filename)) {
-//                String[] fileNameArr = filename.split("\\.");
-//                String suffix = fileNameArr[fileNameArr.length - 1];
-                String suffix = getFileExtention(filename);
-                //判断后缀符合我们的预定义规范
+            String fileName = file.getOriginalFilename();
+            // 判断文件名不能为空
+            if (StringUtils.isNotBlank(fileName)) {
+                String[] fileNameArr = fileName.split("\\.");
+                // 获得后缀
+                String suffix = fileNameArr[fileNameArr.length - 1];
+                // 判断后缀符合我们的预定义规范
                 if (!suffix.equalsIgnoreCase("png") &&
                         !suffix.equalsIgnoreCase("jpg") &&
-                        !suffix.equalsIgnoreCase("jpeg")) {
+                        !suffix.equalsIgnoreCase("jpeg")
+                ) {
                     return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_FORMATTER_FAILD);
                 }
                 //执行上传
@@ -102,7 +105,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
         //0.获得gridfs中人脸文件
         File myFace = readGridFSByFaceId(faceId);
         //1.转换人脸为base64
-        String base64Face = FileUtils.fileToBase64(myFace);
+        String base64Face = FileUtils.encodeBase64(myFace);
         return GraceJSONResult.ok(base64Face);
     }
 
@@ -132,7 +135,4 @@ public class FileUploaderController implements FileUploaderControllerApi {
         return myFile;
     }
 
-    private static String getFileExtention(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
 }
