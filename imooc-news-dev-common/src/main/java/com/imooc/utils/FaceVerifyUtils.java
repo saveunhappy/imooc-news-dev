@@ -95,7 +95,7 @@ public class FaceVerifyUtils {
     public String sendPostVerifyFace(int type, String face1, String face2) throws Exception {
         String body = "";
         if (type == FaceVerifyType.BASE64.type) {
-            body = "{\"content_1\": \"" + face1 + "\", \"content_2\":\"" + face2 + "\", \"type\":\"" + type + "\"}";
+            body = "{\"ImageDataA\": \"" + face1 + "\", \"ImageDataB\":\"" + face2 + "\", \"type\":\"" + type + "\"}";
         } else if (type == FaceVerifyType.IMAGE_URL.type) {
             body = "{\"image_url_1\": \"" + face1 + "\", \"image_url_2\":\"" + face2 + "\", \"type\":\"" + type + "\"}";
         } else {

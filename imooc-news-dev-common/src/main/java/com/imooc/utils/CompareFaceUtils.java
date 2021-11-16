@@ -23,7 +23,8 @@ import javax.annotation.Resource;
 public class CompareFaceUtils {
     @Resource
     private AliyunResource aliyunResource;
-    public void faceVerify(String face1, String face2, Float targetConfidence) {
+    public boolean faceVerify(String face1, String face2, Float targetConfidence) {
+        boolean result = true;
         DefaultProfile profile = DefaultProfile.getProfile(
                 "cn-shanghai",
                 aliyunResource.getAccessKeyID(),
@@ -48,13 +49,15 @@ public class CompareFaceUtils {
             CompareFaceResponse response = client.getAcsResponse(request);
             System.out.println(new Gson().toJson(response));
         } catch (ServerException e) {
+            result = false;
             e.printStackTrace();
         } catch (ClientException e) {
+            result = false;
             System.out.println("ErrCode:" + e.getErrCode());
             System.out.println("ErrMsg:" + e.getErrMsg());
             System.out.println("RequestId:" + e.getRequestId());
         }
-
+        return result;
     }
 
 }

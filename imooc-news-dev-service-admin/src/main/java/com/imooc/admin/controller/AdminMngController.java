@@ -152,14 +152,14 @@ public class AdminMngController extends BaseController implements AdminMngContro
         String base64DB = (String)body.getData();
 
         //3.调用阿里ai进行人脸对比识别，判断可信度，从而实现人脸登录
-        compareFaceUtils.faceVerify(tempFace64,base64DB,60F);
+        boolean result = compareFaceUtils.faceVerify(tempFace64,tempFace64,60F);
 //        boolean result = faceVerifyUtils.faceVerify(
 //                FaceVerifyType.BASE64.type,
 //                tempFace64,
 //                base64DB, 60);
-//        if(!result){
-//            return GraceJSONResult.errorCustom(ResponseStatusEnum.FACE_VERIFY_LOGIN_ERROR);
-//        }
+        if(!result){
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.FACE_VERIFY_LOGIN_ERROR);
+        }
 
         //4.admin登录后的数据设置，redis与token
         doLoginSettings(adminUser,request,response);
