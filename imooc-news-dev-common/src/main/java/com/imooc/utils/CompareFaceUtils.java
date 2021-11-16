@@ -1,4 +1,5 @@
 package com.imooc.utils;
+
 import com.aliyun.tea.*;
 import com.aliyun.facebody20191230.*;
 import com.aliyun.facebody20191230.models.*;
@@ -27,6 +28,7 @@ public class CompareFaceUtils {
     private static final Logger logger = LoggerFactory.getLogger(CompareFaceUtils.class);
     @Resource
     private AliyunResource aliyunResource;
+
     public boolean faceVerify(String face1, String face2, Float targetConfidence) {
         boolean result = false;
         DefaultProfile profile = DefaultProfile.getProfile(
@@ -51,18 +53,17 @@ public class CompareFaceUtils {
 
         try {
             CompareFaceResponse response = client.getAcsResponse(request);
-            System.out.println(new Gson().toJson(response));
-            Gson gson = new Gson();
-            String json = gson.toJson(response);
-            Map<String, Object> map = JsonUtils.jsonToPojo(json, Map.class);
-            Map<String, String> data = (Map<String, String>) map.get("data");
-            Object confidenceStr = data.get("confidence");
-            Double responseConfidence = (Double)confidenceStr;
-            logger.info("人脸对比结果：{}", responseConfidence);
+            Float confidence = response.getData().getConfidence();
+            logger.info(new Gson().toJson(response));
+//            Gson gson = new Gson();
+//            String json = gson.toJson(response);
+//            Map<String, Object> map = JsonUtils.jsonToPojo(json, Map.class);
+//            Map<String, String> data = (Map<String, String>) map.get("data");
+//            Object confidenceStr = data.get("confidence");
+//            Double responseConfidence = (Double)confidenceStr;
+            logger.info("人脸对比结果：{}", confidence);
 
-//        System.out.println(response.toString());
-//        System.out.println(map.toString());
-            result = responseConfidence > targetConfidence;
+            result = confidence > targetConfidence;
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {

@@ -105,7 +105,8 @@ public class FileUploaderController implements FileUploaderControllerApi {
         //0.获得gridfs中人脸文件
         File myFace = readGridFSByFaceId(faceId);
         //1.转换人脸为base64
-        String base64Face = FileUtils.encodeBase64(myFace);
+//        String base64Face = FileUtils.encodeBase64(myFace);
+        String base64Face = FileUtils.fileToBase64(myFace);
         return GraceJSONResult.ok(base64Face);
     }
 
