@@ -55,12 +55,6 @@ public class CompareFaceUtils {
             CompareFaceResponse response = client.getAcsResponse(request);
             Float confidence = response.getData().getConfidence();
             logger.info(new Gson().toJson(response));
-//            Gson gson = new Gson();
-//            String json = gson.toJson(response);
-//            Map<String, Object> map = JsonUtils.jsonToPojo(json, Map.class);
-//            Map<String, String> data = (Map<String, String>) map.get("data");
-//            Object confidenceStr = data.get("confidence");
-//            Double responseConfidence = (Double)confidenceStr;
             logger.info("人脸对比结果：{}", confidence);
 
             result = confidence > targetConfidence;

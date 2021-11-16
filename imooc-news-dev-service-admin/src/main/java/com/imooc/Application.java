@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication(exclude = MongoAutoConfiguration.class)
+@SpringBootApplication
 @MapperScan(basePackages = "com.imooc.admin.mapper")
 //@ComponentScan(basePackages = {"com","org"})
 public class Application {
