@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.imooc.admin.mapper.AdminUserMapper;
 import com.imooc.admin.service.AdminUserService;
+import com.imooc.api.service.BaseService;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.org.n3r.idworker.Sid;
@@ -21,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends BaseService implements AdminUserService {
     @Resource
     private AdminUserMapper adminUserMapper;
     @Resource
@@ -68,15 +69,4 @@ public class AdminUserServiceImpl implements AdminUserService {
         return setterPagedGrid(adminUsers,page);
     }
 
-    private PagedGridResult setterPagedGrid(List<AdminUser> adminUserList,
-                                            Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(adminUserList);
-        PagedGridResult gridResult = new PagedGridResult();
-        gridResult.setRows(adminUserList);
-        gridResult.setPage(page);
-        gridResult.setRecords(pageList.getPages());
-        gridResult.setTotal(pageList.getTotal());
-        return gridResult;
-
-    }
 }
