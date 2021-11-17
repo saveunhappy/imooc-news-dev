@@ -67,6 +67,8 @@ public class CategoryMngController extends BaseController implements CategoryMng
 
     @Override
     public GraceJSONResult getCats() {
+        //把用户和管理员的获取列表进行解耦，一个放到缓存，一个还是查询原来的，
+        //因为管理员的并发不高，而用户并发高。
         // 先从redis中查询，如果有，则返回，如果没有，则查询数据库库后先放缓存，放返回
         String allCatJson = redis.get(REDIS_ALL_CATEGORY);
 
