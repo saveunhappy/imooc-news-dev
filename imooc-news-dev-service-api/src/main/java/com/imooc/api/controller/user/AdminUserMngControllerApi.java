@@ -25,5 +25,12 @@ public interface AdminUserMngControllerApi {
                                 @RequestParam("page") Integer page,
                                 @RequestParam("pageSize") Integer pageSize);
 
+    @ApiOperation(value = "查看用户详情",notes = "查看用户详情",httpMethod = "POST")
+    @PostMapping("/userDetail")
+    GraceJSONResult userDetail(@RequestParam String userId);
 
+    @ApiOperation(value = "冻结用户或者解冻用户",notes = "冻结用户或者解冻用户",httpMethod = "POST")
+    @PostMapping("/freezeUserOrNot")
+    GraceJSONResult freezeUserOrNot(@RequestParam String userId,
+                               @RequestParam Integer doStatus);
 }

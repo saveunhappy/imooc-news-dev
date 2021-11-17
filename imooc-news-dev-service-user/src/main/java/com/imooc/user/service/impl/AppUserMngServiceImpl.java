@@ -10,6 +10,7 @@ import com.imooc.utils.PagedGridResult;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -47,5 +48,13 @@ public class AppUserMngServiceImpl extends BaseService implements AppUserMngServ
         List<AppUser> list = appUserMapper.selectByExample(example);
 
         return setterPagedGrid(list,page);
+    }
+    @Transactional
+    @Override
+    public void freezeUserOrNot(String userId, Integer doStatus) {
+        AppUser user = new AppUser();
+        user.setId(userId);
+        user.setActiveStatus(doStatus);
+        appUserMapper.updateByPrimaryKeySelective(user);
     }
 }
