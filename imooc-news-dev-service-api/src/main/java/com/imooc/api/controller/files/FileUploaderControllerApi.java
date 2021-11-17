@@ -13,9 +13,25 @@ import javax.servlet.http.HttpServletResponse;
 @Api(value = "文件上传的Controller",tags = {"文件上传的Controller"})
 @RequestMapping("fs")
 public interface FileUploaderControllerApi {
-    @ApiOperation(value = "上传用户头像",notes = "上传用户头像",httpMethod = "POST")
+    /**
+     * 上传单文件
+     * @param userId
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/uploadFace")
     GraceJSONResult uploadFace(@RequestParam String userId, MultipartFile file)throws Exception;
+
+    /**
+     * 上传多问阿金
+     * @param userId
+     * @param files
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/uploadSomeFiles")
+    GraceJSONResult uploadFace(@RequestParam String userId, MultipartFile[] files)throws Exception;
 
     /**
      *文件上传到MongoDB的gridfs中

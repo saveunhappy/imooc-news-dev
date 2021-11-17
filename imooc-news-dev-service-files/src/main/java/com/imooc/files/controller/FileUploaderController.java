@@ -25,6 +25,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class FileUploaderController implements FileUploaderControllerApi {
@@ -40,17 +42,13 @@ public class FileUploaderController implements FileUploaderControllerApi {
         String path = "";
         if (file != null) {
             //获取文件上传的名称
-            String fileName = file.getOriginalFilename();
-            // 判断文件名不能为空
-            if (StringUtils.isNotBlank(fileName)) {
-                String[] fileNameArr = fileName.split("\\.");
-                // 获得后缀
-                String suffix = fileNameArr[fileNameArr.length - 1];
-                // 判断后缀符合我们的预定义规范
+            String filename = file.getOriginalFilename();
+            if (StringUtils.isNotBlank(filename)) {
+                String suffix = getFileExtention(filename);
+                //判断后缀符合我们的预定义规范
                 if (!suffix.equalsIgnoreCase("png") &&
                         !suffix.equalsIgnoreCase("jpg") &&
-                        !suffix.equalsIgnoreCase("jpeg")
-                ) {
+                        !suffix.equalsIgnoreCase("jpeg")) {
                     return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_FORMATTER_FAILD);
                 }
                 //执行上传
@@ -71,6 +69,46 @@ public class FileUploaderController implements FileUploaderControllerApi {
 
         }
         return GraceJSONResult.ok(finalpath);
+    }
+
+    @Override
+    public GraceJSONResult uploadFace(String userId, MultipartFile[] files) throws Exception {
+        //声明list
+        List<String> imageUrlList = new ArrayList<>();
+        if(files != null && files.length > 0){
+            for (MultipartFile file : files) {
+                String path = "";
+                if (file != null) {
+                    //获取文件上传的名称
+                    String filename = file.getOriginalFilename();
+                    if (StringUtils.isNotBlank(filename)) {
+                        String suffix = getFileExtention(filename);
+                        //判断后缀符合我们的预定义规范
+                        if (!suffix.equalsIgnoreCase("png") &&
+                                !suffix.equalsIgnoreCase("jpg") &&
+                                !suffix.equalsIgnoreCase("jpeg")) {
+                            continue;
+                        }
+                        //执行上传
+//                path = uploaderService.uploadFdfs(file, suffix);
+                        path = uploaderService.uploadOSS(file,userId,suffix);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+                logger.info("path = " + path);
+                String finalpath = "";
+                if (StringUtils.isNotBlank(path)) {
+                    finalpath = fileResource.getOssHost() + path;
+                    //FIXME: 放入imageList之前，需要对图片做一次审核
+                    imageUrlList.add(finalpath);
+                }
+            }
+        }
+
+        return GraceJSONResult.ok(imageUrlList);
     }
 
     @Override
@@ -135,5 +173,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
 
         return myFile;
     }
-
+    private static String getFileExtention(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
 }
