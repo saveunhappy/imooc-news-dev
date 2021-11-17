@@ -29,4 +29,9 @@ public class FriendLinkController extends BaseController implements FriendLinkCo
         friendLinkService.saveOrUpdateFriendLink(friendLinkMO);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult getFriendLinkList() {
+        return GraceJSONResult.ok(friendLinkService.queryAllFriendLinks());
+    }
 }
