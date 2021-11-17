@@ -1,11 +1,12 @@
 package com.imooc.pojo.mo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
-
-public class SaveFriendLinkMO {
+@Document("FriendLink")
+public class FriendLinkMO {
     @Id
     private String id;
     @Field("link_name")
