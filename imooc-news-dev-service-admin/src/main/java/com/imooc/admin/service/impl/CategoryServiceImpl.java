@@ -38,7 +38,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
          * 4. 再次转换categoryList为json，并存入redis中
          */
 
-        // 直接使用redis删除缓存即可，用户端在查询的时候会直接查库，再把最新的数据放入到缓存中
+        // 直接使用redis删除缓存即可，用户端在查询的时候会直接查库，再把最新的数据放入到缓存中1
         redis.del(REDIS_ALL_CATEGORY);
     }
 
@@ -58,7 +58,7 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
          * 4. 再次转换categoryList为json，并存入redis中
          */
 
-        // 直接使用redis删除缓存即可，用户端在查询的时候会直接查库，再把最新的数据放入到缓存中
+        // 直接使用redis删除缓存即可，用户端在查询的时候会直接查库，再把最新的数据放入到缓存中1
         redis.del(REDIS_ALL_CATEGORY);
     }
 
