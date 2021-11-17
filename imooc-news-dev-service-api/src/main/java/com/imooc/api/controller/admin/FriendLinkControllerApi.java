@@ -27,4 +27,7 @@ public interface FriendLinkControllerApi {
     @ApiOperation(value = "查看友情链接列表",notes = "查看友情链接列表",httpMethod = "POST")
     @PostMapping("/getFriendLinkList")
     GraceJSONResult getFriendLinkList();
+    @ApiOperation(value = "查看友情链接列表",notes = "查看友情链接列表",httpMethod = "POST")
+    @PostMapping("/delete")
+    GraceJSONResult delete(@RequestParam String linkId);
 }

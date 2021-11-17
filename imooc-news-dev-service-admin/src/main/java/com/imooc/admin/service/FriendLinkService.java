@@ -15,4 +15,6 @@ public interface FriendLinkService {
     void saveOrUpdateFriendLink(FriendLinkMO friendLinkMO);
 
     List<FriendLinkMO> queryAllFriendLinks();
+
+    void delete(String linkId);
 }
