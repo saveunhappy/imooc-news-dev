@@ -120,4 +120,32 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
             GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
         }
     }
+
+    @Override
+    public PagedGridResult queryAllArticleListAdmin(Integer status, Integer page, Integer pageSize) {
+        Example articleExample = new Example(Article.class);
+        articleExample.orderBy("createTime").desc();
+
+        Example.Criteria criteria = articleExample.createCriteria();
+        if (ArticleReviewStatus.isArticleStatusValid(status)) {
+            criteria.andEqualTo("articleStatus", status);
+        }
+
+        // 审核中是机审和人审核的两个状态，所以需要单独判断
+        if (status != null && status == 12) {
+            criteria.andEqualTo("articleStatus", ArticleReviewStatus.REVIEWING.type)
+                    .orEqualTo("articleStatus", ArticleReviewStatus.WAITING_MANUAL.type);
+        }
+
+        //isDelete 必须是0
+        criteria.andEqualTo("isDelete", YesOrNo.NO.type);
+
+        /**
+         * page: 第几页
+         * pageSize: 每页显示条数
+         */
+        PageHelper.startPage(page, pageSize);
+        List<Article> list = articleMapper.selectByExample(articleExample);
+        return setterPagedGrid(list, page);
+    }
 }

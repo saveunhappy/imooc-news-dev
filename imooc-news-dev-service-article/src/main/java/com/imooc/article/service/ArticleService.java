@@ -37,4 +37,10 @@ public interface ArticleService {
      * @param pendingStatus
      */
     void updateArticleStatus(String articleId, Integer pendingStatus);
+
+    /**
+     * 管理员查询文章列表
+     */
+    PagedGridResult queryAllArticleListAdmin(Integer status, Integer page, Integer pageSize);
+
 }
