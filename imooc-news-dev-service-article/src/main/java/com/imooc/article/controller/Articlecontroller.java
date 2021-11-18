@@ -6,6 +6,8 @@ import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleCoverType;
+import com.imooc.enums.ArticleReviewStatus;
+import com.imooc.enums.YesOrNo;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.Category;
@@ -92,5 +94,22 @@ public class Articlecontroller extends BaseController implements ArticleControll
         PagedGridResult gridResult = articleService.queryAllArticleListAdmin(status, page, pageSize);
 
         return GraceJSONResult.ok(gridResult);
+    }
+
+    @Override
+    public GraceJSONResult doReview(String articleId, Integer passOrNot) {
+        Integer pedingStatus;
+        if(passOrNot == YesOrNo.YES.type){
+            //审核通过
+            pedingStatus = ArticleReviewStatus.SUCCESS.type;
+        }else if(passOrNot == YesOrNo.NO.type){
+            //审核失败
+            pedingStatus = ArticleReviewStatus.FAILED.type;
+        }else{
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
+        }
+        //保存到数据库，更改文章的状态为审核成功或者失败
+        articleService.updateArticleStatus(articleId,pedingStatus);
+        return GraceJSONResult.ok();
     }
 }

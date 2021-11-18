@@ -32,12 +32,15 @@ public interface ArticleControllerApi {
                                 @RequestParam Date endDate,
                                 @RequestParam Integer page,
                                 @RequestParam Integer pageSize);
-    @PostMapping("queryAllList")
+    @PostMapping("/queryAllList")
     @ApiOperation(value = "管理员查询用户的所有文章列表", notes = "管理员查询用户的所有文章列表", httpMethod = "POST")
     GraceJSONResult queryAllList(@RequestParam Integer status,
                                  @ApiParam(name = "page", value = "查询下一页的第几页")
                                  @RequestParam Integer page,
                                  @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
                                  @RequestParam Integer pageSize);
-
+    @PostMapping("/doReview")
+    @ApiOperation(value = "管理员对文章审核通过或者失败", notes = "管理员对文章审核通过或者失败", httpMethod = "POST")
+    GraceJSONResult doReview(@RequestParam String articleId,
+                                 @RequestParam Integer passOrNot);
 }
