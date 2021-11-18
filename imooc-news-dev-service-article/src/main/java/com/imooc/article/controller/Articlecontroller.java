@@ -3,6 +3,7 @@ package com.imooc.article.controller;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.ArticleControllerApi;
 import com.imooc.api.controller.user.HelloControllerApi;
+import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.grace.result.GraceJSONResult;
@@ -15,13 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 public class Articlecontroller extends BaseController implements ArticleControllerApi {
     private static final Logger logger = LoggerFactory.getLogger(Articlecontroller.class);
-
+    @Resource
+    private ArticleService articleService;
     @Override
     public GraceJSONResult adminLogin(@Valid NewArticleBO newArticleBO) {
         //判断文章封面类型，单图必填，纯文字则设置为空
@@ -34,11 +37,11 @@ public class Articlecontroller extends BaseController implements ArticleControll
         }
         //判断分类id是否存在
         String allCatJson = redis.get(REDIS_ALL_CATEGORY);
+        Category temp = null;
         if(StringUtils.isBlank(allCatJson)){
             return GraceJSONResult.errorCustom(ResponseStatusEnum.SYSTEM_OPERATION_ERROR);
         }else {
             List<Category> categories = JsonUtils.jsonToList(allCatJson, Category.class);
-            Category temp = null;
             for (Category category : categories) {
                 if(category.getId() == newArticleBO.getCategoryId()){
                     temp = category;
@@ -49,7 +52,7 @@ public class Articlecontroller extends BaseController implements ArticleControll
                 return GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_CATEGORY_NOT_EXIST_ERROR);
             }
         }
-
+        articleService.createArticle(newArticleBO,temp);
         logger.info(newArticleBO.toString());
         return GraceJSONResult.ok();
     }
