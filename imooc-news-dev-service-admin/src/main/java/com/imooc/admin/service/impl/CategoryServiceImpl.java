@@ -7,6 +7,7 @@ import com.imooc.api.service.BaseService;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.Category;
+import com.imooc.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,6 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
          * 3. 替换老的category为新的
          * 4. 再次转换categoryList为json，并存入redis中
          */
-
         // 直接使用redis删除缓存即可，用户端在查询的时候会直接查库，再把最新的数据放入到缓存中1
         redis.del(REDIS_ALL_CATEGORY);
     }
