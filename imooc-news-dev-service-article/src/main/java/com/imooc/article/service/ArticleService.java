@@ -22,11 +22,19 @@ public interface ArticleService {
     /**
      *    用户中心，查询我的文章列表
      */
-    public PagedGridResult queryMyArticleList(String userId,
-                                              String keyword,
-                                              Integer status,
-                                              Date startDate,
-                                              Date endDate,
-                                              Integer page,
-                                              Integer pageSize);
+    PagedGridResult queryMyArticleList(String userId,
+                                       String keyword,
+                                       Integer status,
+                                       Date startDate,
+                                       Date endDate,
+                                       Integer page,
+                                       Integer pageSize);
+
+    /**
+     *
+     * 更改文字的状态
+     * @param articleId
+     * @param pendingStatus
+     */
+    void updateArticleStatus(String articleId, Integer pendingStatus);
 }

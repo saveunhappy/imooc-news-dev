@@ -6,6 +6,7 @@ import com.imooc.article.mapper.ArticleMapper;
 import com.imooc.article.mapper.ArticleMapperCustom;
 import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleAppointType;
+import com.imooc.enums.ArticleReviewLevel;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
 import com.imooc.grace.result.GraceJSONResult;
@@ -57,6 +58,19 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if(result != 1){
             GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
+        //TODO 通过阿里智能AI实现对文章文本的自动检测
+        String reviewTextResult = ArticleReviewLevel.REVIEW.type;
+        if(reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.PASS.type)){
+            //修改当前的文章，状态标记为审核通过
+            this.updateArticleStatus(articleId,ArticleReviewStatus.SUCCESS.type);
+        }else if(reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.REVIEW.type)){
+            //修改当前文章，状态标记为需要人工审核
+            this.updateArticleStatus(articleId,ArticleReviewStatus.WAITING_MANUAL.type);
+        }else if(reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.BLOCK.type)){
+            //修改当前文章，状态标记为审核未通过
+            this.updateArticleStatus(articleId,ArticleReviewStatus.FAILED.type);
+
+        }
     }
     @Transactional
     @Override
@@ -91,5 +105,19 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         List<Article> articles = articleMapper.selectByExample(example);
 
         return setterPagedGrid(articles,page);
+    }
+    @Transactional
+    @Override
+    public void updateArticleStatus(String articleId, Integer pendingStatus) {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id",articleId);
+        Article pendingArticle = new Article();
+        pendingArticle.setArticleStatus(pendingStatus);
+        //这里就是把pedingarticle里面的ArticleStatus设置到example中去。
+        int result =  articleMapper.updateByExampleSelective(pendingArticle,example);
+        if(result != 1){
+            GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
+        }
     }
 }
