@@ -7,10 +7,7 @@ import com.imooc.pojo.bo.SaveFriendLinkBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +24,13 @@ public interface FriendLinkControllerApi {
     @ApiOperation(value = "查看友情链接列表",notes = "查看友情链接列表",httpMethod = "POST")
     @PostMapping("/getFriendLinkList")
     GraceJSONResult getFriendLinkList();
-    @ApiOperation(value = "查看友情链接列表",notes = "查看友情链接列表",httpMethod = "POST")
+    @ApiOperation(value = "删除友情链接列表",notes = "删除友情链接列表",httpMethod = "POST")
     @PostMapping("/delete")
     GraceJSONResult delete(@RequestParam String linkId);
+
+    @ApiOperation(value = "门户端查询友情链接列表", notes = "门户端查询友情链接列表", httpMethod = "GET")
+    @GetMapping("portal/list")
+    public GraceJSONResult queryPortalAllFriendLinkList();
+
+
 }

@@ -2,6 +2,7 @@ package com.imooc.admin.service.impl;
 
 import com.imooc.admin.repository.FriendLinkRepository;
 import com.imooc.admin.service.FriendLinkService;
+import com.imooc.enums.YesOrNo;
 import com.imooc.pojo.mo.FriendLinkMO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,5 +32,10 @@ public class FriendLinkServiceImpl implements FriendLinkService {
     @Override
     public void delete(String linkId) {
         friendLinkRepository.deleteById(linkId);
+    }
+
+    @Override
+    public List<FriendLinkMO> queryPortalAllFriendLinks() {
+        return friendLinkRepository.getAllByIsDelete(YesOrNo.NO.type);
     }
 }
