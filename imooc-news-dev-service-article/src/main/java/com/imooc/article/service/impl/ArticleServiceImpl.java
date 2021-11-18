@@ -2,6 +2,7 @@ package com.imooc.article.service.impl;
 
 import com.imooc.api.service.BaseService;
 import com.imooc.article.mapper.ArticleMapper;
+import com.imooc.article.mapper.ArticleMapperCustom;
 import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleReviewStatus;
@@ -23,6 +24,8 @@ import java.util.Date;
 public class ArticleServiceImpl extends BaseService implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private ArticleMapperCustom articleMapperCustom;
     @Resource
     private Sid sid;
     @Transactional
@@ -49,5 +52,10 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if(result != 1){
             GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
+    }
+    @Transactional
+    @Override
+    public void updateAppointToPublish() {
+        articleMapperCustom.updateAppointToPublish();
     }
 }
