@@ -9,6 +9,7 @@ import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleReviewLevel;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
+import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.org.n3r.idworker.Sid;
@@ -147,5 +148,41 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         PageHelper.startPage(page, pageSize);
         List<Article> list = articleMapper.selectByExample(articleExample);
         return setterPagedGrid(list, page);
+    }
+
+    @Transactional
+    @Override
+    public void deleteArticle(String userId, String articleId) {
+        Example articleExample = makeExampleCriteria(userId, articleId);
+
+        Article pending = new Article();
+        pending.setIsDelete(YesOrNo.YES.type);
+
+        int result = articleMapper.updateByExampleSelective(pending, articleExample);
+        if (result != 1) {
+            GraceException.display(ResponseStatusEnum.ARTICLE_DELETE_ERROR);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void withdrawArticle(String userId, String articleId) {
+        Example articleExample = makeExampleCriteria(userId, articleId);
+
+        Article pending = new Article();
+        pending.setArticleStatus(ArticleReviewStatus.WITHDRAW.type);
+
+        int result = articleMapper.updateByExampleSelective(pending, articleExample);
+        if (result != 1) {
+            GraceException.display(ResponseStatusEnum.ARTICLE_WITHDRAW_ERROR);
+        }
+    }
+
+    private Example makeExampleCriteria(String userId, String articleId) {
+        Example articleExample = new Example(Article.class);
+        Example.Criteria criteria = articleExample.createCriteria();
+        criteria.andEqualTo("publishUserId", userId);
+        criteria.andEqualTo("id", articleId);
+        return articleExample;
     }
 }

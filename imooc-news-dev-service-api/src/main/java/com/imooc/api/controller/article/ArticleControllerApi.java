@@ -43,4 +43,14 @@ public interface ArticleControllerApi {
     @ApiOperation(value = "管理员对文章审核通过或者失败", notes = "管理员对文章审核通过或者失败", httpMethod = "POST")
     GraceJSONResult doReview(@RequestParam String articleId,
                                  @RequestParam Integer passOrNot);
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "用户删除文章", notes = "用户删除文章", httpMethod = "POST")
+    GraceJSONResult delete(@RequestParam String userId,
+                           @RequestParam String articleId);
+
+    @PostMapping("/withdraw")
+    @ApiOperation(value = "用户撤回文章", notes = "用户撤回文章", httpMethod = "POST")
+    GraceJSONResult withdraw(@RequestParam String userId,
+                             @RequestParam String articleId);
 }
