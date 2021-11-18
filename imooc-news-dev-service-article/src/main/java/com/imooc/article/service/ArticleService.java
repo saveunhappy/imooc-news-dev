@@ -4,6 +4,9 @@ import com.imooc.pojo.AppUser;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
+import com.imooc.utils.PagedGridResult;
+
+import java.util.Date;
 
 public interface ArticleService {
     /**
@@ -15,4 +18,15 @@ public interface ArticleService {
      * 更新定时发布为即时发布
      */
     void updateAppointToPublish();
+
+    /**
+     *    用户中心，查询我的文章列表
+     */
+    public PagedGridResult queryMyArticleList(String userId,
+                                              String keyword,
+                                              Integer status,
+                                              Date startDate,
+                                              Date endDate,
+                                              Integer page,
+                                              Integer pageSize);
 }

@@ -11,6 +11,7 @@ import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
 import com.imooc.utils.JsonUtils;
+import com.imooc.utils.PagedGridResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class Articlecontroller extends BaseController implements ArticleControll
     @Resource
     private ArticleService articleService;
     @Override
-    public GraceJSONResult adminLogin(@Valid NewArticleBO newArticleBO) {
+    public GraceJSONResult createArticle(@Valid NewArticleBO newArticleBO) {
         //判断文章封面类型，单图必填，纯文字则设置为空
         if(newArticleBO.getArticleType() == ArticleCoverType.ONE_IMAGE.type){
             if(StringUtils.isBlank(newArticleBO.getArticleCover())){
@@ -55,5 +57,24 @@ public class Articlecontroller extends BaseController implements ArticleControll
         articleService.createArticle(newArticleBO,temp);
         logger.info(newArticleBO.toString());
         return GraceJSONResult.ok();
+    }
+
+    @Override
+    public GraceJSONResult queryMyList(String userId,
+                                       String keyword,
+                                       Integer status,
+                                       Date startDate,
+                                       Date endDate,
+                                       Integer page,
+                                       Integer pageSize) {
+        if(page == null){
+            page = COMMON_START_PAGE;
+        }
+        if(pageSize == null){
+            pageSize = COMMON_PAGE_SIZE;
+        }
+        PagedGridResult result = articleService.queryMyArticleList(userId, keyword, status, startDate, endDate, page, pageSize);
+
+        return GraceJSONResult.ok(result);
     }
 }

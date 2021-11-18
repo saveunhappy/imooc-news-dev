@@ -1,5 +1,6 @@
 package com.imooc.article.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
 import com.imooc.article.mapper.ArticleMapper;
 import com.imooc.article.mapper.ArticleMapperCustom;
@@ -13,12 +14,16 @@ import com.imooc.org.n3r.idworker.Sid;
 import com.imooc.pojo.Article;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
+import com.imooc.utils.PagedGridResult;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl extends BaseService implements ArticleService {
@@ -57,5 +62,34 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     @Override
     public void updateAppointToPublish() {
         articleMapperCustom.updateAppointToPublish();
+    }
+
+    @Override
+    public PagedGridResult queryMyArticleList(String userId, String keyword, Integer status, Date startDate, Date endDate, Integer page, Integer pageSize) {
+        Example example = new Example(Article.class);
+        example.orderBy("createTime").desc();
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("publishUserId",userId);
+        if(StringUtils.isNotBlank(keyword)){
+            criteria.andLike("title","%" + keyword + "%");
+        }
+        if (ArticleReviewStatus.isArticleStatusValid(status)) {
+            criteria.andEqualTo("articleStatus",status);
+        }
+        if(status != null && status == 12){
+            criteria.andEqualTo("articleStatus",ArticleReviewStatus.REVIEWING.type)
+                    .orEqualTo("articleStatus",ArticleReviewStatus.WAITING_MANUAL.type);
+        }
+        criteria.andEqualTo("isDelete",YesOrNo.NO.type);
+        if(startDate != null){
+            criteria.andGreaterThanOrEqualTo("publishTime",startDate);
+        }
+        if(endDate != null){
+            criteria.andLessThanOrEqualTo("publishTime",endDate);
+        }
+        PageHelper.startPage(page,pageSize);
+        List<Article> articles = articleMapper.selectByExample(example);
+
+        return setterPagedGrid(articles,page);
     }
 }
