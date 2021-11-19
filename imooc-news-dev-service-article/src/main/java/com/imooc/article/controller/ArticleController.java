@@ -2,9 +2,7 @@ package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.ArticleControllerApi;
-import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.article.service.ArticleService;
-import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
@@ -25,8 +23,8 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-public class Articlecontroller extends BaseController implements ArticleControllerApi {
-    private static final Logger logger = LoggerFactory.getLogger(Articlecontroller.class);
+public class ArticleController extends BaseController implements ArticleControllerApi {
+    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
     @Resource
     private ArticleService articleService;
     @Override

@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -77,5 +79,35 @@ public class UserController extends BaseController implements UserControllerApi 
             redis.set(REDIS_USER_INFO+":"+userId,JsonUtils.objectToJson(user));
         }
         return user;
+    }
+
+    @Override
+    public GraceJSONResult queryByIds(String userIds) {
+        //这里的传过来的是一个Set转换成的String，
+        if (StringUtils.isBlank(userIds)) {
+            return GraceJSONResult.errorCustom(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
+        }
+
+        List<AppUserVO> publisherList = new ArrayList<>();
+        List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
+        //这里又把String给拆成好几个id了。然后返回这几个id去查询对应的作者
+        for (String userId : userIdList) {
+            // 获得用户基本信息
+            AppUserVO userVO = getBasicUserInfo(userId);
+            // 添加到publisherList
+            publisherList.add(userVO);
+        }
+
+        return GraceJSONResult.ok(publisherList);
+    }
+    private AppUserVO getBasicUserInfo(String userId) {
+        // 1. 根据userId查询用户的信息
+        AppUser user = getUser(userId);
+
+        // 2. 返回用户信息
+        AppUserVO userVO = new AppUserVO();
+        BeanUtils.copyProperties(user, userVO);
+
+        return userVO;
     }
 }
