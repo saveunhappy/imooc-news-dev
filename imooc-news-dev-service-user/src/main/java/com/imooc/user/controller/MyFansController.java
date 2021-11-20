@@ -3,8 +3,10 @@ package com.imooc.user.controller;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.api.controller.user.MyFansControllerApi;
+import com.imooc.enums.Sex;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
+import com.imooc.pojo.vo.FansCountsVO;
 import com.imooc.user.mapper.FansMapper;
 import com.imooc.user.service.MyFansService;
 import com.imooc.utils.PagedGridResult;
@@ -53,5 +55,15 @@ public class MyFansController extends BaseController implements MyFansController
         }
         PagedGridResult result = myFansService.queryMyFansList(writerId, page, pageSize);
         return GraceJSONResult.ok(result);
+    }
+
+    @Override
+    public GraceJSONResult queryRatio(String writerId) {
+        int manCounts = myFansService.queryFansCounts(writerId, Sex.man);
+        int womanCounts = myFansService.queryFansCounts(writerId, Sex.woman);
+        FansCountsVO fansCountsVO = new FansCountsVO();
+        fansCountsVO.setManCounts(manCounts);
+        fansCountsVO.setWomanCounts(womanCounts);
+        return GraceJSONResult.ok(fansCountsVO);
     }
 }

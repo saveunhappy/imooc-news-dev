@@ -1,5 +1,6 @@
 package com.imooc.user.service;
 
+import com.imooc.enums.Sex;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
@@ -19,4 +20,7 @@ public interface MyFansService {
     void unfollow(String writerId, String fanId);
 
     PagedGridResult queryMyFansList(String writerId,Integer page,Integer pageSize);
+
+    Integer queryFansCounts(String writerId, Sex sex);
+
 }

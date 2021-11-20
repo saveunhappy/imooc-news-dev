@@ -33,4 +33,8 @@ public interface MyFansControllerApi {
                                  @RequestParam Integer page,
                                  @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
                                  @RequestParam Integer pageSize);
+
+    @ApiOperation(value = "查询男女粉丝数量",notes = "查询男女粉丝数量",httpMethod = "POST")
+    @PostMapping("/queryRatio")
+    GraceJSONResult queryRatio(@RequestParam String writerId);
 }

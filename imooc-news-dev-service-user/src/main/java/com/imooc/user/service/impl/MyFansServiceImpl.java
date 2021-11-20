@@ -88,4 +88,15 @@ public class MyFansServiceImpl extends BaseService implements MyFansService {
         List<Fans> list = fansMapper.select(fans);
         return setterPagedGrid(list,page);
     }
+
+    @Override
+    public Integer queryFansCounts(String writerId, Sex sex) {
+        Fans fans = new Fans();
+        fans.setWriterId(writerId);
+        fans.setSex(sex.type);
+        int count = fansMapper.selectCount(fans);
+        return count;
+
+    }
+
 }
