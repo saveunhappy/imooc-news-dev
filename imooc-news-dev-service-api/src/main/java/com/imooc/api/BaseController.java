@@ -2,6 +2,7 @@ package com.imooc.api;
 
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
@@ -88,5 +89,12 @@ public class BaseController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+    public Integer getCountsFromRedis(String key){
+        String countStr = redis.get(key);
+        if(StringUtils.isBlank(key)){
+            countStr = "0";
+        }
+        return Integer.valueOf(countStr);
     }
 }
