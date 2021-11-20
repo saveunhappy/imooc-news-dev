@@ -178,6 +178,15 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         if(!publisherList.isEmpty()){
             articleDetailVO.setPublishUserName(publisherList.get(0).getNickname());
         }
+        articleDetailVO.setReadCounts(
+                getCountsFromRedis(REDIS_ARTICLE_READ_COUNTS + ":" + articleId));
+
         return GraceJSONResult.ok(articleDetailVO);
+    }
+
+    @Override
+    public GraceJSONResult readArticle(String articleId, HttpServletRequest request) {
+        redis.increment(REDIS_ARTICLE_READ_COUNTS + ":" + articleId, 1);
+        return GraceJSONResult.ok();
     }
 }
