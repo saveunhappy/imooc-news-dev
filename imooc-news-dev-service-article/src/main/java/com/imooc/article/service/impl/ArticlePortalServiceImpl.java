@@ -47,6 +47,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         return setterPagedGrid(list,page);
     }
 
+
     @Override
     public List<Article> queryHotList() {
         Example articleExample = new Example(Article.class);
@@ -72,5 +73,41 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
 
         return criteria;
     }
+
+    @Override
+    public PagedGridResult queryArticleListOfWriter(String writerId, Integer page, Integer pageSize) {
+        Example articleExample = new Example(Article.class);
+
+        Example.Criteria criteria = setDefualArticleExample(articleExample);
+        criteria.andEqualTo("publishUserId", writerId);
+
+        /**
+         * page: 第几页
+         * pageSize: 每页显示条数
+         */
+        PageHelper.startPage(page, pageSize);
+        List<Article> list = articleMapper.selectByExample(articleExample);
+        return setterPagedGrid(list, page);
+    }
+
+    @Override
+    public PagedGridResult queryGoodArticleListOfWriter(String writerId) {
+        Example articleExample = new Example(Article.class);
+        articleExample.orderBy("publishTime").desc();
+
+        Example.Criteria criteria = setDefualArticleExample(articleExample);
+        criteria.andEqualTo("publishUserId", writerId);
+
+        /**
+         * page: 第几页
+         * pageSize: 每页显示条数
+         * 这个和上个区别就是这个指定了就显示5个，只显示一页
+         */
+        PageHelper.startPage(1, 5);
+        List<Article> list = articleMapper.selectByExample(articleExample);
+        //这个和上个区别就是这个指定了就显示5个，只显示一页
+        return setterPagedGrid(list, 1);
+    }
+
 
 }

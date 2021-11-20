@@ -144,6 +144,27 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         return GraceJSONResult.ok(articlePortalService.queryHotList());
     }
 
+    @Override
+    public GraceJSONResult queryArticleListOfWriter(String writerId, Integer page, Integer pageSize) {
 
+        System.out.println("writerId=" + writerId);
 
+        if (page == null) {
+            page = COMMON_START_PAGE;
+        }
+
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        PagedGridResult gridResult = articlePortalService.queryArticleListOfWriter(writerId, page, pageSize);
+        gridResult = rebuildArticleGrid(gridResult);
+        return GraceJSONResult.ok(gridResult);
+    }
+
+    @Override
+    public GraceJSONResult queryGoodArticleListOfWriter(String writerId) {
+        PagedGridResult gridResult = articlePortalService.queryGoodArticleListOfWriter(writerId);
+        return GraceJSONResult.ok(gridResult);
+    }
 }

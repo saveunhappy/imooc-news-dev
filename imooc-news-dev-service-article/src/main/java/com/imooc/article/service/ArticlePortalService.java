@@ -22,5 +22,17 @@ public interface ArticlePortalService {
     /**
      * 首页查询热闻列表
      */
-    public List<Article> queryHotList();
+    List<Article> queryHotList();
+
+    /**
+     * 查询作家发布的所有文章列表
+     */
+    PagedGridResult queryArticleListOfWriter(String writerId,
+                                             Integer page,
+                                             Integer pageSize);
+
+    /**
+     * 作家页面查询近期佳文
+     */
+    PagedGridResult queryGoodArticleListOfWriter(String writerId);
 }
