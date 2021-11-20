@@ -67,7 +67,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         /**
          * 这个就是原始的list，好多个人的文章都在首页显示的那个
          */
-        List<Article> list = (List<Article>)gridResult.getRows();
+        List<Article> list = (List<Article>) gridResult.getRows();
 
         // 1. 构建发布者id列表
         /**
@@ -81,17 +81,18 @@ public class ArticlePortalController extends BaseController implements ArticlePo
             // 1.1 构建发布者的set
             idSet.add(a.getPublishUserId());
             // 1.2 构建文章id的list
+            idList.add(REDIS_ARTICLE_READ_COUNTS + ":" + a.getId());
         }
         System.out.println(idSet.toString());
         // 发起redis的mget批量查询api，获得对应的值
-
+        List<String> readCountsRedisList = redis.mget(idList);
         // 2. 发起远程调用（restTemplate），请求用户服务获得用户（idSet 发布者）的列表
         List<AppUserVO> publisherList = getPublisherList(idSet);
 
         // 3. 拼接两个list，重组文章列表
         List<IndexArticleVO> indexArticleList = new ArrayList<>();
 
-        for (int i = 0 ; i < list.size() ; i ++) {
+        for (int i = 0; i < list.size(); i++) {
             IndexArticleVO indexArticleVO = new IndexArticleVO();
             //这是原始的，所有作者的文章
             Article a = list.get(i);
@@ -99,9 +100,25 @@ public class ArticlePortalController extends BaseController implements ArticlePo
             BeanUtils.copyProperties(a, indexArticleVO);
 
             // 3.1 从publisherList中获得发布者的基本信息
-            AppUserVO publisher  = getUserIfPublisher(a.getPublishUserId(), publisherList);
+            AppUserVO publisher = getUserIfPublisher(a.getPublishUserId(), publisherList);
             //这里就是设置那个多出来的AppUserVo,拼接的那个多出来的
             indexArticleVO.setPublisherVO(publisher);
+            // 3.2 重新组装设置文章列表中的阅读量
+            /*
+            不用担心这里会乱掉，以为查询出来的就是首页按照顺序来的，没有阅读数的，
+            就是查不到，这里也是顺序查的，所以没有就是没有，放心
+            */
+            String redisCountsStr = readCountsRedisList.get(i);
+            int readCounts = 0;
+            if (StringUtils.isNotBlank(redisCountsStr)) {
+                //刚才这个是在详情页显示的阅读数，但是我们在首页看全部
+                //文章的时候应该也能看到，所以再查询首页文章的时候也应该给显示一下
+                //之前这里是在循环里面去连接redis，现在吧所以的都查出来了，通过mget一次性查出来
+                //就是不需要循环去连接redis了。这里还是循环着去设置。
+                readCounts = Integer.parseInt(redisCountsStr);
+            }
+            indexArticleVO.setReadCounts(readCounts);
+
             indexArticleList.add(indexArticleVO);
         }
 
@@ -115,7 +132,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
                                          List<AppUserVO> publisherList) {
         //传过来的是用户id，然后list是这些用户发布过的文章，去进行一个匹配，查找到对应的人
         for (AppUserVO user : publisherList) {
-             if (user.getId().equalsIgnoreCase(publisherId)) {
+            if (user.getId().equalsIgnoreCase(publisherId)) {
                 return user;
             }
         }
@@ -175,7 +192,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         Set<String> set = new HashSet<>();
         set.add(articleDetailVO.getPublishUserId());
         List<AppUserVO> publisherList = getPublisherList(set);
-        if(!publisherList.isEmpty()){
+        if (!publisherList.isEmpty()) {
             articleDetailVO.setPublishUserName(publisherList.get(0).getNickname());
         }
         articleDetailVO.setReadCounts(
@@ -188,7 +205,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     public GraceJSONResult readArticle(String articleId, HttpServletRequest request) {
         String userIp = IPUtil.getRequestIp(request);
         // 设置针对当前用户ip的永久存在的key，存入到redis，表示该ip的用户已经阅读过了，无法累加阅读量
-        redis.setnx(REDIS_ALREADY_READ + ":" +  articleId + ":" + userIp, userIp);
+        redis.setnx(REDIS_ALREADY_READ + ":" + articleId + ":" + userIp, userIp);
         redis.increment(REDIS_ARTICLE_READ_COUNTS + ":" + articleId, 1);
         return GraceJSONResult.ok();
     }
