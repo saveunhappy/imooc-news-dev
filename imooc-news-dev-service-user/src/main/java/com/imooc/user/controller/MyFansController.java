@@ -66,4 +66,9 @@ public class MyFansController extends BaseController implements MyFansController
         fansCountsVO.setWomanCounts(womanCounts);
         return GraceJSONResult.ok(fansCountsVO);
     }
+
+    @Override
+    public GraceJSONResult queryRatioByRegion(String writerId) {
+        return GraceJSONResult.ok(myFansService.queryRegionRatioCounts(writerId));
+    }
 }

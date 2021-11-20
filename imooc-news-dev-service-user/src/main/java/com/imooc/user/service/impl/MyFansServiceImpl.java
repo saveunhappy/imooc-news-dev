@@ -11,6 +11,7 @@ import com.imooc.org.n3r.idworker.Sid;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.Fans;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
+import com.imooc.pojo.vo.RegionRatioVO;
 import com.imooc.user.mapper.AppUserMapper;
 import com.imooc.user.mapper.FansMapper;
 import com.imooc.user.service.MyFansService;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -98,5 +100,24 @@ public class MyFansServiceImpl extends BaseService implements MyFansService {
         return count;
 
     }
-
+    public static final String[] regions = {"北京", "天津", "上海", "重庆",
+            "河北", "山西", "辽宁", "吉林", "黑龙江", "江苏", "浙江", "安徽", "福建", "江西", "山东",
+            "河南", "湖北", "湖南", "广东", "海南", "四川", "贵州", "云南", "陕西", "甘肃", "青海", "台湾",
+            "内蒙古", "广西", "西藏", "宁夏", "新疆",
+            "香港", "澳门"};
+    @Override
+    public List<RegionRatioVO> queryRegionRatioCounts(String writerId) {
+        Fans fans = new Fans();
+        fans.setWriterId(writerId);
+        List<RegionRatioVO> list = new ArrayList<>();
+        for(String province : regions){
+            fans.setProvince(province);
+            Integer count = fansMapper.selectCount(fans);
+            RegionRatioVO regionRatioVO = new RegionRatioVO();
+            regionRatioVO.setName(province);
+            regionRatioVO.setValue(count);
+            list.add(regionRatioVO);
+        }
+        return list;
+    }
 }

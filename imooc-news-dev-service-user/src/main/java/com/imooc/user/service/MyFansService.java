@@ -4,7 +4,10 @@ import com.imooc.enums.Sex;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
+import com.imooc.pojo.vo.RegionRatioVO;
 import com.imooc.utils.PagedGridResult;
+
+import java.util.List;
 
 public interface MyFansService {
     /**
@@ -23,4 +26,6 @@ public interface MyFansService {
 
     Integer queryFansCounts(String writerId, Sex sex);
 
+
+    List<RegionRatioVO> queryRegionRatioCounts(String writerId);
 }
