@@ -14,4 +14,6 @@ public interface MyFansService {
     boolean isMeFollowThisWriter(String writerId, String fanId);
 
     GraceJSONResult follow(String writerId, String fanId);
+
+    void unfollow(String writerId, String fanId);
 }

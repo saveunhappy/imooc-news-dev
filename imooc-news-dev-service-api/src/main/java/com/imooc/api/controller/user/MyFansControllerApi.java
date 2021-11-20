@@ -20,4 +20,8 @@ public interface MyFansControllerApi {
     @PostMapping("/follow")
     GraceJSONResult follow(@RequestParam String writerId,
                                          @RequestParam String fanId);
+    @ApiOperation(value = "取消关注，作家损失粉丝",notes = "取消关注，作家损失粉丝",httpMethod = "POST")
+    @PostMapping("/unfollow")
+    GraceJSONResult unfollow(@RequestParam String writerId,
+                           @RequestParam String fanId);
 }

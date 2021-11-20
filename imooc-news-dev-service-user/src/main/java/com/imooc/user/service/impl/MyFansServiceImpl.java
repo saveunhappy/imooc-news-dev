@@ -42,7 +42,7 @@ public class MyFansServiceImpl extends BaseService implements MyFansService {
         int count = fansMapper.selectCount(fans);
         return count > 0;
     }
-
+    @Transactional
     @Override
     public GraceJSONResult follow(String writerId, String fanId) {
         AppUser fanInfo = userService.getUser(fanId);
@@ -64,5 +64,20 @@ public class MyFansServiceImpl extends BaseService implements MyFansService {
         //当前用户(我的)关注数累加
         redis.increment(REDIS_MY_FOLLOW_COUNTS + ":" + fanId,1);
         return GraceJSONResult.ok();
+    }
+    @Transactional
+    @Override
+    public void unfollow(String writerId, String fanId) {
+        Fans fans = new Fans();
+        fans.setFanId(fanId);
+        fans.setWriterId(writerId);
+        int res = fansMapper.delete(fans);
+        if(res != 1){
+            GraceException.display(ResponseStatusEnum.SYSTEM_OPERATION_ERROR);
+        }
+        // redis作家粉丝数累减
+        redis.decrement(REDIS_WRITER_FANS_COUNTS + ":" + writerId,1);
+        //当前用户(我的)关注数累减
+        redis.decrement(REDIS_MY_FOLLOW_COUNTS + ":" + fanId,1);
     }
 }

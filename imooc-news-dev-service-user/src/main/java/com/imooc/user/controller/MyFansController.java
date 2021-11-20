@@ -30,4 +30,10 @@ public class MyFansController extends BaseController implements MyFansController
         myFansService.follow(writerId,fanId);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult unfollow(String writerId, String fanId) {
+        myFansService.unfollow(writerId,fanId);
+        return GraceJSONResult.ok();
+    }
 }
