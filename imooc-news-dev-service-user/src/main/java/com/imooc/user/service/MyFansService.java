@@ -12,4 +12,6 @@ public interface MyFansService {
      * @return
      */
     boolean isMeFollowThisWriter(String writerId, String fanId);
+
+    GraceJSONResult follow(String writerId, String fanId);
 }

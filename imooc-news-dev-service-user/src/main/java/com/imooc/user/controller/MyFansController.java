@@ -24,4 +24,10 @@ public class MyFansController extends BaseController implements MyFansController
         boolean res = myFansService.isMeFollowThisWriter(writerId, fanId);
         return GraceJSONResult.ok(res);
     }
+
+    @Override
+    public GraceJSONResult follow(String writerId, String fanId) {
+        myFansService.follow(writerId,fanId);
+        return GraceJSONResult.ok();
+    }
 }

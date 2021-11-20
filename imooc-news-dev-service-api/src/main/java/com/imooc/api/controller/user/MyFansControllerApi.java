@@ -15,4 +15,9 @@ public interface MyFansControllerApi {
     @PostMapping("/isMeFollowThisWriter")
     GraceJSONResult isMeFollowThisWriter(@RequestParam String writerId,
                                          @RequestParam String fanId);
+
+    @ApiOperation(value = "用户关注作家,成为粉丝",notes = "用户关注作家,成为粉丝",httpMethod = "POST")
+    @PostMapping("/follow")
+    GraceJSONResult follow(@RequestParam String writerId,
+                                         @RequestParam String fanId);
 }
