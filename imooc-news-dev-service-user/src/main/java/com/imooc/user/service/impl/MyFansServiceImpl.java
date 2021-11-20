@@ -1,5 +1,6 @@
 package com.imooc.user.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
 import com.imooc.enums.Sex;
 import com.imooc.enums.UserStatus;
@@ -14,10 +15,7 @@ import com.imooc.user.mapper.AppUserMapper;
 import com.imooc.user.mapper.FansMapper;
 import com.imooc.user.service.MyFansService;
 import com.imooc.user.service.UserService;
-import com.imooc.utils.DateUtil;
-import com.imooc.utils.DesensitizationUtil;
-import com.imooc.utils.JsonUtils;
-import com.imooc.utils.RedisOperator;
+import com.imooc.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MyFansServiceImpl extends BaseService implements MyFansService {
@@ -79,5 +78,14 @@ public class MyFansServiceImpl extends BaseService implements MyFansService {
         redis.decrement(REDIS_WRITER_FANS_COUNTS + ":" + writerId,1);
         //当前用户(我的)关注数累减
         redis.decrement(REDIS_MY_FOLLOW_COUNTS + ":" + fanId,1);
+    }
+
+    @Override
+    public PagedGridResult queryMyFansList(String writerId,Integer page,Integer pageSize) {
+        Fans fans = new Fans();
+        fans.setWriterId(writerId);
+        PageHelper.startPage(page,pageSize);
+        List<Fans> list = fansMapper.select(fans);
+        return setterPagedGrid(list,page);
     }
 }

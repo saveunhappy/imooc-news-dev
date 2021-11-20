@@ -3,6 +3,7 @@ package com.imooc.user.service;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.bo.UpdateUserInfoBO;
+import com.imooc.utils.PagedGridResult;
 
 public interface MyFansService {
     /**
@@ -16,4 +17,6 @@ public interface MyFansService {
     GraceJSONResult follow(String writerId, String fanId);
 
     void unfollow(String writerId, String fanId);
+
+    PagedGridResult queryMyFansList(String writerId,Integer page,Integer pageSize);
 }
