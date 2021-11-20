@@ -3,6 +3,7 @@ package com.imooc.article.service;
 import com.imooc.pojo.Article;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
+import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.utils.PagedGridResult;
 
 import java.util.Date;
@@ -35,4 +36,9 @@ public interface ArticlePortalService {
      * 作家页面查询近期佳文
      */
     PagedGridResult queryGoodArticleListOfWriter(String writerId);
+
+    /**
+     * 查询文章详情
+     */
+    ArticleDetailVO queryDetail(String articleId);
 }

@@ -7,6 +7,7 @@ import com.imooc.article.service.ArticleService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.Article;
 import com.imooc.pojo.vo.AppUserVO;
+import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.pojo.vo.IndexArticleVO;
 import com.imooc.utils.IPUtil;
 import com.imooc.utils.JsonUtils;
@@ -166,5 +167,17 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     public GraceJSONResult queryGoodArticleListOfWriter(String writerId) {
         PagedGridResult gridResult = articlePortalService.queryGoodArticleListOfWriter(writerId);
         return GraceJSONResult.ok(gridResult);
+    }
+
+    @Override
+    public GraceJSONResult detail(String articleId) {
+        ArticleDetailVO articleDetailVO = articlePortalService.queryDetail(articleId);
+        Set<String> set = new HashSet<>();
+        set.add(articleDetailVO.getPublishUserId());
+        List<AppUserVO> publisherList = getPublisherList(set);
+        if(!publisherList.isEmpty()){
+            articleDetailVO.setPublishUserName(publisherList.get(0).getNickname());
+        }
+        return GraceJSONResult.ok(articleDetailVO);
     }
 }

@@ -39,4 +39,7 @@ public interface ArticlePortalControllerApi {
     @ApiOperation(value = "作家页面查询近期佳文", notes = "作家页面查询近期佳文", httpMethod = "GET")
     GraceJSONResult queryGoodArticleListOfWriter(@RequestParam String writerId);
 
+    @GetMapping("detail")
+    @ApiOperation(value = "文章详情查询", notes = "文章详情查询", httpMethod = "GET")
+    public GraceJSONResult detail(@RequestParam String articleId);
 }
