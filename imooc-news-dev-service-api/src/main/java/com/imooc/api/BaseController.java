@@ -1,9 +1,14 @@
 package com.imooc.api;
 
+import com.imooc.grace.result.GraceJSONResult;
+import com.imooc.pojo.vo.AppUserVO;
+import com.imooc.utils.JsonUtils;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -14,10 +19,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class BaseController {
     @Resource
     public RedisOperator redis;
+    @Resource
+    public RestTemplate restTemplate;
     public static final String MOBILE_SMSCODE = "mobile:smscode";
     public static final String REDIS_USER_TOKEN = "redis_user_token";
     public static final String REDIS_USER_INFO = "redis_user_info";
@@ -96,5 +104,19 @@ public class BaseController {
             countStr = "0";
         }
         return Integer.valueOf(countStr);
+    }
+
+    public List<AppUserVO> getBasicUserList(Set idSet) {
+        String userServerUrlExecute
+                = "http://user.imoocnews.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        ResponseEntity<GraceJSONResult> responseEntity
+                = restTemplate.getForEntity(userServerUrlExecute, GraceJSONResult.class);
+        GraceJSONResult bodyResult = responseEntity.getBody();
+        List<AppUserVO> userVOList = null;
+        if (bodyResult.getStatus() == 200) {
+            String userJson = JsonUtils.objectToJson(bodyResult.getData());
+            userVOList = JsonUtils.jsonToList(userJson, AppUserVO.class);
+        }
+        return userVOList;
     }
 }
