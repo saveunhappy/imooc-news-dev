@@ -2,24 +2,16 @@ package com.imooc.article.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
-import com.imooc.article.mapper.ArticleMapper;
 import com.imooc.article.mapper.CommentsMapper;
 import com.imooc.article.mapper.CommentsMapperCustom;
 import com.imooc.article.service.ArticlePortalService;
 import com.imooc.article.service.CommentPortalService;
-import com.imooc.enums.ArticleAppointType;
-import com.imooc.enums.ArticleReviewStatus;
-import com.imooc.enums.YesOrNo;
 import com.imooc.org.n3r.idworker.Sid;
-import com.imooc.pojo.Article;
 import com.imooc.pojo.Comments;
 import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.pojo.vo.CommentsVO;
 import com.imooc.utils.PagedGridResult;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -39,7 +31,7 @@ public class CommentPortalServiceImpl extends BaseService implements CommentPort
     private CommentsMapperCustom commentsMapperCustom;
 
     @Override
-    public void createComment(String articleId, String fatherCommentId, String content, String userId, String nickname) {
+    public void createComment( String articleId, String fatherCommentId, String content, String userId, String nickname,String face) {
         String commentId = sid.nextShort();
         ArticleDetailVO articleDetailVO = articlePortalService.queryDetail(articleId);
         Comments comments = new Comments();
@@ -52,6 +44,7 @@ public class CommentPortalServiceImpl extends BaseService implements CommentPort
         comments.setCommentUserId(userId);
         comments.setCommentUserNickname(nickname);
         comments.setContent(content);
+        comments.setCommentUserFace(face);
         comments.setCreateTime(new Date());
         commentsMapper.insert(comments);
         redis.increment(REDIS_ARTICLE_COMMENT_COUNTS + ":" + articleId,1);
@@ -64,5 +57,24 @@ public class CommentPortalServiceImpl extends BaseService implements CommentPort
         PageHelper.startPage(page,pageSize);
         List<CommentsVO> list = commentsMapperCustom.queryArticleCommentList(map);
         return setterPagedGrid(list,page);
+    }
+    @Override
+    public PagedGridResult queryWriterCommentsMng(String writerId, Integer page, Integer pageSize) {
+
+        Comments comment = new Comments();
+        comment.setWriterId(writerId);
+
+        PageHelper.startPage(page, pageSize);
+        List<Comments> list = commentsMapper.select(comment);
+        return setterPagedGrid(list, page);
+    }
+
+    @Override
+    public void deleteComment(String writerId, String commentId) {
+        Comments comment = new Comments();
+        comment.setId(commentId);
+        comment.setWriterId(writerId);
+
+        commentsMapper.delete(comment);
     }
 }

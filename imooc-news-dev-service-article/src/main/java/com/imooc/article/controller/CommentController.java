@@ -5,6 +5,7 @@ import com.imooc.api.controller.article.CommentControllerApi;
 import com.imooc.article.service.CommentPortalService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.bo.CommentReplyBO;
+import com.imooc.utils.PagedGridResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -24,12 +25,13 @@ public class CommentController extends BaseController implements CommentControll
         Set<String> idStr = new HashSet<>();
         idStr.add(userId);
         String nickname = getBasicUserList(idStr).get(0).getNickname();
+        String face = getBasicUserList(idStr).get(0).getFace();
         //3.保存用户评论的消息到数据库
         commentPortalService.createComment(commentReplyBO.getArticleId(),
                 commentReplyBO.getFatherId(),
                 commentReplyBO.getContent(),
                 userId,
-                nickname);
+                nickname,face);
         return GraceJSONResult.ok();
     }
 
@@ -52,5 +54,25 @@ public class CommentController extends BaseController implements CommentControll
         }
 
         return GraceJSONResult.ok(commentPortalService.queryArticleComments(articleId,page,pageSize));
+    }
+
+    @Override
+    public GraceJSONResult mng(String writerId, Integer page, Integer pageSize) {
+
+        if (page == null) {
+            page = COMMON_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        PagedGridResult gridResult = commentPortalService.queryWriterCommentsMng(writerId, page, pageSize);
+        return GraceJSONResult.ok(gridResult);
+    }
+
+    @Override
+    public GraceJSONResult delete(String writerId, String commentId) {
+        commentPortalService.deleteComment(writerId, commentId);
+        return GraceJSONResult.ok();
     }
 }

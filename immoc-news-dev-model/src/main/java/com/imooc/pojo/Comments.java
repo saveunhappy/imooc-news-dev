@@ -53,8 +53,8 @@ public class Comments {
     /**
      * 冗余的用户头像
      */
-//    @Column(name = "comment_user_face")
-//    private String commentUserFace;
+    @Column(name = "comment_user_face")
+    private String commentUserFace;
 
     /**
      * 留言内容
@@ -212,18 +212,18 @@ public class Comments {
      *
      * @return comment_user_face - 冗余的用户头像
      */
-//    public String getCommentUserFace() {
-//        return commentUserFace;
-//    }
+    public String getCommentUserFace() {
+        return commentUserFace;
+    }
 
     /**
      * 设置冗余的用户头像
      *
      * @param commentUserFace 冗余的用户头像
      */
-//    public void setCommentUserFace(String commentUserFace) {
-//        this.commentUserFace = commentUserFace;
-//    }
+    public void setCommentUserFace(String commentUserFace) {
+        this.commentUserFace = commentUserFace;
+    }
 
     /**
      * 获取留言内容
