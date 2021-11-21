@@ -36,4 +36,11 @@ public class CommentController extends BaseController implements CommentControll
                 nickname);
         return GraceJSONResult.ok();
     }
+
+    @Override
+    public GraceJSONResult count(String articleId) {
+        Integer counts = getCountsFromRedis(REDIS_ARTICLE_COMMENT_COUNTS + ":" + articleId);
+
+        return GraceJSONResult.ok(counts);
+    }
 }
