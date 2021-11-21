@@ -2,12 +2,9 @@ package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.CommentControllerApi;
-import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.article.service.CommentPortalService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.bo.CommentReplyBO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -17,7 +14,6 @@ import java.util.Set;
 
 @RestController
 public class CommentController extends BaseController implements CommentControllerApi {
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
     @Resource
     private CommentPortalService commentPortalService;
     @Override
@@ -38,9 +34,23 @@ public class CommentController extends BaseController implements CommentControll
     }
 
     @Override
-    public GraceJSONResult count(String articleId) {
+    public GraceJSONResult counts(String articleId) {
         Integer counts = getCountsFromRedis(REDIS_ARTICLE_COMMENT_COUNTS + ":" + articleId);
 
         return GraceJSONResult.ok(counts);
+    }
+
+    @Override
+    public GraceJSONResult list(String articleId,
+                                Integer page,
+                                Integer pageSize) {
+        if(page == null){
+            page = COMMON_PAGE_SIZE;
+        }
+        if(pageSize == 0){
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        return GraceJSONResult.ok(commentPortalService.queryArticleComments(articleId,page,pageSize));
     }
 }

@@ -18,6 +18,10 @@ public interface CommentPortalService {
                                           String userId,
                                           String nickname
                                       );
-
-
+    /**
+     * 查询文章评论列表
+     */
+    PagedGridResult queryArticleComments(String articleId,
+                                         Integer page,
+                                         Integer pageSize);
 }
