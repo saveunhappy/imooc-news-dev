@@ -71,3 +71,7 @@ mapper:
 pagehelper:
   helperDialect: mysql
   supportMethodsArguments: true
+#定义freeMarker生成的html位置
+freemarker:
+  html:
+    target: D:\devCode\imooc-news-dev\imooc-news-dev-service-article\src\main\resources\template
