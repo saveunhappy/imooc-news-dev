@@ -29,6 +29,20 @@
         <#list stu.parents?keys as key>
             <div>${stu.parents[key]}</div>
         </#list>
+
+        <br>
+        <#if stu.uid == '333'>
+            <div>${stu.age}</div>
+        </#if>
+        <#if stu.age == 11>
+            <div>${stu.uid}</div>
+        </#if>
+        <#if stu.spouse??>
+            <div>有对象</div>
+        </#if>
+        <#if !stu.spouse??>
+            <div>单身狗</div>
+        </#if>
     </div>
 </div>
 </body>
