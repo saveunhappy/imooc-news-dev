@@ -26,7 +26,7 @@
 
 	<link rel="shortcut icon" href="../img/mu-toutiao.ico" />
 
-	<title id="pageTitle">[此处显示文章title]</title>
+	<title id="pageTitle">${articleDetail.title}</title>
 </head>
 
 <body>
@@ -65,11 +65,11 @@
         <!-- 中间主体部分 -->
         <div class="container">
             
-            <div class="big-title" v-bind:class="{'big-title-bottom': (articleDetail.readCounts == '' || articleDetail.readCounts == null)}">
-                {{articleDetail.title}}
+            <div class="big-title">
+                ${articleDetail.title}
             </div>
-            <div class="read-counts" v-show="articleDetail.readCounts != '' && articleDetail.readCounts != null">
-                阅读量：{{articleDetail.readCounts}}
+            <div class="read-counts">
+                阅读量： ${articleDetail.readCounts}
             </div>
 
             <div class="detail-really">
@@ -78,16 +78,16 @@
                 <div class="left-social">
 
                     <div class="date-title">
-                        <span class="year">{{formatDataYear(articleDetail.publishTime)}}</span>
+                        <span class="year">${articleDetail.publishTime?string('yyyy')}</span>
                     </div>
                     <div class="back-year-line"></div>
 
-                    <div class="date-md">{{formatDataMonthDay(articleDetail.publishTime)}}</div>
+                    <div class="date-md">${articleDetail.publishTime?string('MM/dd')}</div>
 
-                    <div class="date-times">{{formatDataTime(articleDetail.publishTime)}}</div>
+                    <div class="date-times">${articleDetail.publishTime?string('HH:mm:ss')}</div>
 
-                    <div class="writer-name" @click="showWriter(articleDetail.publishUserId)">
-                        {{articleDetail.publishUserName}}
+                    <div class="writer-name" @click="showWriter('${articleDetail.publishUserId}')">
+                        ${articleDetail.publishUserName}
                     </div>
 
                     <div class="imooc-words">
@@ -129,7 +129,8 @@
                 <div class="container-middle">
                     <div class="article-wrapper">
 
-                        <div class="content" v-html="articleDetail.content">
+                        <div class="content">
+                            ${articleDetail.content}
                         </div>
 
                         <div class="declare">
@@ -273,11 +274,18 @@
                 app.judgeUserLoginStatus(me);
 
                 // 查询文章详情
-                var articleId = app.getUrlParam("articleId");
-                // console.log(articleId);
-                this.articleId = articleId;
-                this.getArticleDetail(articleId);
+                // var articleId = app.getUrlParam("articleId");
+                // // console.log(articleId);
+                // this.articleId = articleId;
+                // this.getArticleDetail(articleId);
 
+                /*
+                * 根据当前页面的名称，定义为文章的articleId作为我们的页面静态化名称
+                * 比如1001.html
+                */
+                var thisPage = app.getPageName();
+                var articleId = thisPage;
+                this.articleId = articleId;
                 // 获得分类
                 this.getAllCategory();
                 // 文章阅读数累加
