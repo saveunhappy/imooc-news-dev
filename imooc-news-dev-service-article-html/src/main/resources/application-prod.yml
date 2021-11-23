@@ -1,0 +1,10 @@
+server:
+  port: 8002
+
+spring:
+  redis:
+    database: 0
+    host: 47.100.235.50
+    port: 6379
+website:
+  domain-name: imoocnews.com

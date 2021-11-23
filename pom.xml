@@ -15,6 +15,7 @@
         <module>imooc-news-dev-service-files</module>
         <module>imooc-news-dev-service-admin</module>
         <module>imooc-news-dev-service-article</module>
+        <module>imooc-news-dev-service-article-html</module>
     </modules>
 
     <packaging>pom</packaging>
