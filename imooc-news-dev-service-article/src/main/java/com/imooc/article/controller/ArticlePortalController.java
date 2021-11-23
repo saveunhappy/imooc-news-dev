@@ -195,10 +195,18 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         if (!publisherList.isEmpty()) {
             articleDetailVO.setPublishUserName(publisherList.get(0).getNickname());
         }
+        //之前直接就是获取的属性，后来变成静态化，就是数字了，这里变成动态，要抽取出来，
+        //下面那个是加1，这个是获取，不一样。
         articleDetailVO.setReadCounts(
                 getCountsFromRedis(REDIS_ARTICLE_READ_COUNTS + ":" + articleId));
 
         return GraceJSONResult.ok(articleDetailVO);
+    }
+
+
+    @Override
+    public Integer readCounts(String articleId) {
+        return getCountsFromRedis(REDIS_ARTICLE_READ_COUNTS + ":" + articleId);
     }
 
     @Override
