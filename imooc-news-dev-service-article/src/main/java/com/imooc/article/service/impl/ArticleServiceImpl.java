@@ -109,6 +109,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     }
     @Transactional
     @Override
+    public void updateArticleToGridFS(String articleId, String articleMongoId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setMongoFileId(articleMongoId);
+        articleMapper.updateByPrimaryKeySelective(article);
+    }
+
+    @Transactional
+    @Override
     public void updateArticleStatus(String articleId, Integer pendingStatus) {
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();

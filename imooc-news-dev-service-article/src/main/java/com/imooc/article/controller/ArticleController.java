@@ -14,20 +14,25 @@ import com.imooc.pojo.vo.AppUserVO;
 import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.PagedGridResult;
+import com.mongodb.client.gridfs.GridFSBucket;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -39,6 +44,8 @@ public class ArticleController extends BaseController implements ArticleControll
     private ArticleService articleService;
     @Value("${freemarker.html.article}")
     private String articlePath;
+    @Resource
+    private GridFSBucket gridFSBucket;
     @Override
     public GraceJSONResult createArticle(@Valid NewArticleBO newArticleBO) {
         //判断文章封面类型，单图必填，纯文字则设置为空
@@ -122,7 +129,10 @@ public class ArticleController extends BaseController implements ArticleControll
         articleService.updateArticleStatus(articleId, pedingStatus);
         if (pedingStatus == ArticleReviewStatus.SUCCESS.type) {
             try {
-                createArticleHTML(articleId);
+//                createArticleHTML(articleId);
+                String articleMongoId = createArticleHTMLToGridFS(articleId);
+                //存储到对应的文章进行关联保存
+                articleService.updateArticleToGridFS(articleId,articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("创建文章出错");
@@ -155,6 +165,24 @@ public class ArticleController extends BaseController implements ArticleControll
         Writer out = new FileWriter(articlePath);
         template.process(map,out);
         out.close();
+    }
+
+    //文章生成html
+    public String createArticleHTMLToGridFS(String articleId) throws Exception {
+        //0.配置freemarker基本环境
+        Configuration cfg = new Configuration(Configuration.getVersion());
+        String classPath = this.getClass().getResource("/").getPath();
+        cfg.setDirectoryForTemplateLoading(new File(makePathAndSubstring(classPath + "templates")));
+        //1.获得现有的模板ftl文件
+        Template template = cfg.getTemplate("detail.ftl", StandardCharsets.UTF_8.name());
+        //获得文章的详情数据
+        ArticleDetailVO detailVO = getArticleDetail(articleId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("articleDetail",detailVO);
+        String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
+        InputStream inputStream = IOUtils.toInputStream(content);
+        ObjectId objectId = gridFSBucket.uploadFromStream(detailVO.getId() + ".html", inputStream);
+        return objectId.toString();
     }
     //发起远程调用rest,获得文章详情数据
     public ArticleDetailVO getArticleDetail(String articleId) {
