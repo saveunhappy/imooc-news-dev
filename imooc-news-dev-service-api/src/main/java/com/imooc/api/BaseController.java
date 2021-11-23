@@ -100,7 +100,7 @@ public class BaseController {
     }
     public Integer getCountsFromRedis(String key){
         String countStr = redis.get(key);
-        if(StringUtils.isBlank(key)){
+        if(StringUtils.isBlank(countStr)){
             countStr = "0";
         }
         return Integer.valueOf(countStr);

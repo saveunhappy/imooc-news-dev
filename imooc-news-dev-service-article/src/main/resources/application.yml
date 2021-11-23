@@ -75,3 +75,4 @@ pagehelper:
 freemarker:
   html:
     target: D:\devCode\imooc-news-dev\imooc-news-dev-service-article\src\main\resources\template
+    article: D:\chromedownload\apache-tomcat-8.5.65\apache-tomcat-8.5.65\webapps\imooc-news\portal\a
