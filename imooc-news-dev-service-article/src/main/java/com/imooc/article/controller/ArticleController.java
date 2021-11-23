@@ -6,6 +6,7 @@ import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
+import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.Category;
@@ -23,6 +24,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -46,6 +48,7 @@ public class ArticleController extends BaseController implements ArticleControll
     private String articlePath;
     @Resource
     private GridFSBucket gridFSBucket;
+
     @Override
     public GraceJSONResult createArticle(@Valid NewArticleBO newArticleBO) {
         //判断文章封面类型，单图必填，纯文字则设置为空
@@ -132,7 +135,9 @@ public class ArticleController extends BaseController implements ArticleControll
 //                createArticleHTML(articleId);
                 String articleMongoId = createArticleHTMLToGridFS(articleId);
                 //存储到对应的文章进行关联保存
-                articleService.updateArticleToGridFS(articleId,articleMongoId);
+                articleService.updateArticleToGridFS(articleId, articleMongoId);
+                //调用消费端执行下载html
+                doDownloadArticleHTML(articleId,articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("创建文章出错");
@@ -141,9 +146,22 @@ public class ArticleController extends BaseController implements ArticleControll
 
         return GraceJSONResult.ok();
     }
-    private String makePathAndSubstring(String path){
-        return path.substring(1).replace("/",File.separator);
+
+    private void doDownloadArticleHTML(String articleId, String articleMongoId) {
+        String url = "http://html.imoocnews.com:8002/article/html/download?" +
+                "articleId=" + articleId + "&articleMongoId=" + articleMongoId;
+        Integer status = restTemplate.getForObject(url, Integer.class);
+        if (HttpStatus.OK.value() == status) {
+            return;
+        }
+        GraceException.display(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
     }
+
+
+    private String makePathAndSubstring(String path) {
+        return path.substring(1).replace("/", File.separator);
+    }
+
     //文章生成html
     public void createArticleHTML(String articleId) throws Exception {
         //0.配置freemarker基本环境
@@ -154,16 +172,16 @@ public class ArticleController extends BaseController implements ArticleControll
         Template template = cfg.getTemplate("detail.ftl", StandardCharsets.UTF_8.name());
         //获得文章的详情数据
         ArticleDetailVO detailVO = getArticleDetail(articleId);
-        Map<String,Object> map = new HashMap<>();
-        map.put("articleDetail",detailVO);
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleDetail", detailVO);
         //3.融合动态数据ftl,生成HTML
         File tempDic = new File(articlePath);
-        if(!tempDic.exists()){
+        if (!tempDic.exists()) {
             tempDic.mkdirs();
         }
         articlePath = articlePath + File.separator + detailVO.getId() + ".html";
         Writer out = new FileWriter(articlePath);
-        template.process(map,out);
+        template.process(map, out);
         out.close();
     }
 
@@ -177,13 +195,14 @@ public class ArticleController extends BaseController implements ArticleControll
         Template template = cfg.getTemplate("detail.ftl", StandardCharsets.UTF_8.name());
         //获得文章的详情数据
         ArticleDetailVO detailVO = getArticleDetail(articleId);
-        Map<String,Object> map = new HashMap<>();
-        map.put("articleDetail",detailVO);
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleDetail", detailVO);
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
         InputStream inputStream = IOUtils.toInputStream(content);
         ObjectId objectId = gridFSBucket.uploadFromStream(detailVO.getId() + ".html", inputStream);
         return objectId.toString();
     }
+
     //发起远程调用rest,获得文章详情数据
     public ArticleDetailVO getArticleDetail(String articleId) {
         String url
