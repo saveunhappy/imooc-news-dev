@@ -1,6 +1,7 @@
 package com.imooc.article.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.imooc.api.config.RabbitMQConfig;
 import com.imooc.api.config.RabbitMQDelayConfig;
 import com.imooc.api.service.BaseService;
 import com.imooc.article.mapper.ArticleMapper;
@@ -229,10 +230,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         gridFSBucket.delete(new ObjectId(articleMongoId));
 
         // 3. 删除消费端的HTML文件
-        doDeleteArticleHTML(articleId);
-        //doDeleteArticleHTMLByMQ(articleId);
+//        doDeleteArticleHTML(articleId);
+        doDeleteArticleHTMLByMQ(articleId);
     }
-
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    private void doDeleteArticleHTMLByMQ(String articleId) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_ARTICLE,
+                "article.html.download.do", articleId);
+    }
     @Autowired
     public RestTemplate restTemplate;
     private void doDeleteArticleHTML(String articleId) {

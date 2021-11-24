@@ -27,8 +27,17 @@ public class RabbitMQConsumer {
             articleHTMLComponent.download(articleId,articleMongoId);
 
 
-        }else{
-            System.out.println("不符合规则");
+        } else if (receivedRoutingKey.equalsIgnoreCase("article.html.download.do")) {
+
+            String articleId = payload;
+            try {
+                articleHTMLComponent.delete(articleId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println("不符合的规则：" + receivedRoutingKey);
         }
     }
 }
