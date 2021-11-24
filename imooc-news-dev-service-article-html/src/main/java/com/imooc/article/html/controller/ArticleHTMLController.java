@@ -1,9 +1,7 @@
-package com.imooc.article.controller;
+package com.imooc.article.html.controller;
 
 import com.imooc.api.controller.article.ArticleHTMLControllerApi;
-import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.exception.GraceException;
-import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.mongodb.client.gridfs.GridFSBucket;
 import org.bson.types.ObjectId;
@@ -35,6 +33,21 @@ public class ArticleHTMLController implements ArticleHTMLControllerApi {
             e.printStackTrace();
             GraceException.display(ResponseStatusEnum.SYSTEM_FILE_NOT_FOUND);
         }
+        return HttpStatus.OK.value();
+    }
+
+    @Override
+    public Integer delete(String articleId) throws Exception {
+
+        // 拼接最终文件的保存的地址
+        String path = articlePath + File.separator + articleId + ".html";
+
+        // 获取文件流，定义存放的位置和名称
+        File file = new File(path);
+
+        // 删除文件
+        file.delete();
+
         return HttpStatus.OK.value();
     }
 }

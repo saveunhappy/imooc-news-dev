@@ -1,11 +1,10 @@
-package com.imooc.article.controller;
+package com.imooc.article.html.controller;
 
 import com.imooc.pojo.Article;
 import com.imooc.pojo.Spouse;
 import com.imooc.pojo.Stu;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import org.apache.commons.lang3.CharSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 

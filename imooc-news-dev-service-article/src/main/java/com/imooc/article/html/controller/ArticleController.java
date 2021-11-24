@@ -1,8 +1,8 @@
-package com.imooc.article.controller;
+package com.imooc.article.html.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.ArticleControllerApi;
-import com.imooc.article.service.ArticleService;
+import com.imooc.article.html.service.ArticleService;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
@@ -11,7 +11,6 @@ import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
-import com.imooc.pojo.vo.AppUserVO;
 import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.PagedGridResult;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,10 +1,10 @@
-package com.imooc.article.service.impl;
+package com.imooc.article.html.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
-import com.imooc.article.mapper.ArticleMapper;
-import com.imooc.article.mapper.ArticleMapperCustom;
-import com.imooc.article.service.ArticleService;
+import com.imooc.article.html.mapper.ArticleMapper;
+import com.imooc.article.html.service.ArticleService;
+import com.imooc.article.html.mapper.ArticleMapperCustom;
 import com.imooc.enums.ArticleAppointType;
 import com.imooc.enums.ArticleReviewLevel;
 import com.imooc.enums.ArticleReviewStatus;

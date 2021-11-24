@@ -1,4 +1,4 @@
-package com.imooc.article.service;
+package com.imooc.article.html.service;
 
 import com.imooc.pojo.Article;
 import com.imooc.pojo.vo.ArticleDetailVO;

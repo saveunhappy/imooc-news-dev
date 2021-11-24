@@ -19,4 +19,9 @@ public interface ArticleHTMLControllerApi {
     @GetMapping("/download")
     Integer download(String articleId,String articleMongoId);
 
+
+    @GetMapping("delete")
+    @ApiOperation(value = "删除html", notes = "删除html", httpMethod = "GET")
+    public Integer delete(String articleId) throws Exception;
+
 }

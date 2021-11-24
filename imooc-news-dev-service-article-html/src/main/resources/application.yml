@@ -32,6 +32,12 @@ spring:
     content-type: text/html
     suffix: .ftl
     template-loader-path: classpath:/templates/
+  rabbitmq:
+    host: 47.100.235.50
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: imooc-news-dev
 #定义freeMarker生成的html位置
 freemarker:
   html:

@@ -1,4 +1,4 @@
-package com.imooc.api.config;
+package com.imooc.article.html;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;

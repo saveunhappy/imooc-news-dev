@@ -1,12 +1,9 @@
-package com.imooc.article.task;
+package com.imooc.article.html.task;
 
-import com.imooc.article.service.ArticleService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.imooc.article.html.service.ArticleService;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 
 //@Configuration
 //@EnableScheduling
