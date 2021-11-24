@@ -1,11 +1,11 @@
-package com.imooc.article.html.service.impl;
+package com.imooc.article.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
-import com.imooc.article.html.service.ArticlePortalService;
-import com.imooc.article.html.service.CommentPortalService;
-import com.imooc.article.html.mapper.CommentsMapper;
-import com.imooc.article.html.mapper.CommentsMapperCustom;
+import com.imooc.article.service.ArticlePortalService;
+import com.imooc.article.service.CommentPortalService;
+import com.imooc.article.mapper.CommentsMapper;
+import com.imooc.article.mapper.CommentsMapperCustom;
 import com.imooc.org.n3r.idworker.Sid;
 import com.imooc.pojo.Comments;
 import com.imooc.pojo.vo.ArticleDetailVO;

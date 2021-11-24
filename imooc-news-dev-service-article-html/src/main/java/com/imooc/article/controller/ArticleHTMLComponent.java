@@ -1,6 +1,5 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
-import com.imooc.api.controller.article.ArticleHTMLControllerApi;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.mongodb.client.gridfs.GridFSBucket;
@@ -12,17 +11,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @RestController
-public class ArticleHTMLController implements ArticleHTMLControllerApi {
-    private static final Logger logger = LoggerFactory.getLogger(ArticleHTMLController.class);
+public class ArticleHTMLComponent {
+    private static final Logger logger = LoggerFactory.getLogger(ArticleHTMLComponent.class);
     @Resource
     private GridFSBucket gridFSBucket;
     @Value("${freemarker.html.article}")
     private String articlePath;
 
-    @Override
     public Integer download(String articleId, String articleMongoId) {
         String path = articlePath + File.separator + articleId + ".html";
         File file = new File(path);
@@ -35,8 +36,6 @@ public class ArticleHTMLController implements ArticleHTMLControllerApi {
         }
         return HttpStatus.OK.value();
     }
-
-    @Override
     public Integer delete(String articleId) throws Exception {
 
         // 拼接最终文件的保存的地址

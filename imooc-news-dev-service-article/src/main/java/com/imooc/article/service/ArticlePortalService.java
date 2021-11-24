@@ -1,12 +1,9 @@
-package com.imooc.article.html.service;
+package com.imooc.article.service;
 
 import com.imooc.pojo.Article;
-import com.imooc.pojo.Category;
-import com.imooc.pojo.bo.NewArticleBO;
 import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.utils.PagedGridResult;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ArticlePortalService {

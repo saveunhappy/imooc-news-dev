@@ -1,4 +1,4 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
 import com.imooc.api.config.RabbitMQConfig;
 import com.imooc.grace.result.GraceJSONResult;

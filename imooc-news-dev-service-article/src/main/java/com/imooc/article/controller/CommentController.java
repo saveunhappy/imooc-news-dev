@@ -1,8 +1,8 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.CommentControllerApi;
-import com.imooc.article.html.service.CommentPortalService;
+import com.imooc.article.service.CommentPortalService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.bo.CommentReplyBO;
 import com.imooc.utils.PagedGridResult;

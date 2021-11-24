@@ -1,4 +1,4 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
 import com.imooc.pojo.Article;
 import com.imooc.pojo.Spouse;

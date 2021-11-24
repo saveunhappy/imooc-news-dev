@@ -1,8 +1,9 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
+import com.imooc.api.config.RabbitMQConfig;
 import com.imooc.api.controller.article.ArticleControllerApi;
-import com.imooc.article.html.service.ArticleService;
+import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.enums.ArticleReviewStatus;
 import com.imooc.enums.YesOrNo;
@@ -22,11 +23,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -135,7 +139,9 @@ public class ArticleController extends BaseController implements ArticleControll
                 //存储到对应的文章进行关联保存
                 articleService.updateArticleToGridFS(articleId, articleMongoId);
                 //调用消费端执行下载html
-                doDownloadArticleHTML(articleId,articleMongoId);
+//                doDownloadArticleHTML(articleId,articleMongoId);
+                //发送消息到mq队列，让消费者监听并且执行下载html
+                doDownloadArticleHTMLByMQ(articleId,articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("创建文章出错");
@@ -144,7 +150,13 @@ public class ArticleController extends BaseController implements ArticleControll
 
         return GraceJSONResult.ok();
     }
-
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+    private void doDownloadArticleHTMLByMQ(String articleId, String articleMongoId) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_ARTICLE,
+                "article.download.do",
+                articleId +"," + articleMongoId);
+    }
     private void doDownloadArticleHTML(String articleId, String articleMongoId) {
         String url = "http://html.imoocnews.com:8002/article/html/download?" +
                 "articleId=" + articleId + "&articleMongoId=" + articleMongoId;

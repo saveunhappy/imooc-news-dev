@@ -1,8 +1,8 @@
-package com.imooc.article.html.controller;
+package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.ArticlePortalControllerApi;
-import com.imooc.article.html.service.ArticlePortalService;
+import com.imooc.article.service.ArticlePortalService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.Article;
 import com.imooc.pojo.vo.AppUserVO;

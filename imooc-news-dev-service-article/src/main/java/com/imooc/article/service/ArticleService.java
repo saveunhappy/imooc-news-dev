@@ -1,9 +1,7 @@
-package com.imooc.article.html.service;
+package com.imooc.article.service;
 
-import com.imooc.pojo.AppUser;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
-import com.imooc.pojo.bo.UpdateUserInfoBO;
 import com.imooc.utils.PagedGridResult;
 
 import java.util.Date;

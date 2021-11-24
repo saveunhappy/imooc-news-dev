@@ -1,6 +1,6 @@
-package com.imooc.article.html.task;
+package com.imooc.article.task;
 
-import com.imooc.article.html.service.ArticleService;
+import com.imooc.article.service.ArticleService;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;

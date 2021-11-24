@@ -1,10 +1,6 @@
-package com.imooc.article.html.service;
+package com.imooc.article.service;
 
-import com.imooc.pojo.Article;
-import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.utils.PagedGridResult;
-
-import java.util.List;
 
 public interface CommentPortalService {
 
