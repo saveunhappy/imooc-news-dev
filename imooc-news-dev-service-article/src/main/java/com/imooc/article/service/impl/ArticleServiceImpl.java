@@ -74,7 +74,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
             int delayTime = (int)(endDate.getTime() - startDate.getTime());
             MessagePostProcessor messagePostProcessor = message -> {
                 message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                message.getMessageProperties().setDelay(5000);
+                message.getMessageProperties().setDelay(delayTime);
                 return message;
             };
             template.convertAndSend(RabbitMQDelayConfig.EXCHANGE_DELAY,
