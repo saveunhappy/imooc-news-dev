@@ -16,7 +16,10 @@ public interface ArticleService {
      * 更新定时发布为即时发布
      */
     void updateAppointToPublish();
-
+    /**
+     * 更新单条文章为即时发布
+     */
+    void updateArticleToPublish(String articleId);
     /**
      *    用户中心，查询我的文章列表
      */

@@ -1,6 +1,7 @@
 package com.imooc.article.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.imooc.api.config.RabbitMQDelayConfig;
 import com.imooc.api.service.BaseService;
 import com.imooc.article.mapper.ArticleMapper;
 import com.imooc.article.service.ArticleService;
@@ -16,8 +17,12 @@ import com.imooc.org.n3r.idworker.Sid;
 import com.imooc.pojo.Article;
 import com.imooc.pojo.Category;
 import com.imooc.pojo.bo.NewArticleBO;
+import com.imooc.utils.DateUtil;
 import com.imooc.utils.PagedGridResult;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +38,8 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     private ArticleMapper articleMapper;
     @Resource
     private ArticleMapperCustom articleMapperCustom;
+    @Resource
+    private RabbitTemplate template;
     @Resource
     private Sid sid;
     @Transactional
@@ -59,6 +66,26 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if(result != 1){
             GraceJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
+        if(article.getIsAppoint() == ArticleAppointType.TIMING.type){
+
+            Date endDate = newArticleBO.getPublishTime();
+            Date startDate = new Date();
+//            int delayTime = endDate.compareTo(startDate);
+            int delayTime = (int)(endDate.getTime() - startDate.getTime());
+            MessagePostProcessor messagePostProcessor = message -> {
+                message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                message.getMessageProperties().setDelay(5000);
+                return message;
+            };
+            template.convertAndSend(RabbitMQDelayConfig.EXCHANGE_DELAY,
+                    "publish.delay.display",
+                    articleId,
+                    messagePostProcessor);
+            System.out.println("publish.delay.display");
+            System.out.println("延迟消息，定时发布文章："+ new Date());
+
+        }
+
         //TODO 通过阿里智能AI实现对文章文本的自动检测
         String reviewTextResult = ArticleReviewLevel.REVIEW.type;
         if(reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.PASS.type)){
@@ -78,7 +105,14 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     public void updateAppointToPublish() {
         articleMapperCustom.updateAppointToPublish();
     }
-
+    @Transactional
+    @Override
+    public void updateArticleToPublish(String articleId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setIsAppoint(ArticleAppointType.IMMEDIATELY.type);
+        articleMapper.updateByPrimaryKeySelective(article);
+    }
     @Override
     public PagedGridResult queryMyArticleList(String userId, String keyword, Integer status, Date startDate, Date endDate, Integer page, Integer pageSize) {
         Example example = new Example(Article.class);

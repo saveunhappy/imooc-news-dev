@@ -33,7 +33,7 @@ public class RabbitMQDelayConfig {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
-                .with("delay.#")
+                .with("publish.delay.#")
                 .noargs();//执行绑定
     }
 }
