@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "com.imooc.article.mapper")
 @ComponentScan(basePackages = {"com.imooc", "org.n3r.idworker"})
 @EnableEurekaClient
-//@RibbonClient(name="SERVICE-USER",configuration = MyRule.class)
+@RibbonClient(name="SERVICE-USER",configuration = MyRule.class)
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class,args);
