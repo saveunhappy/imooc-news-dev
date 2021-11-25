@@ -146,14 +146,22 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
     // 发起远程调用，获得用户的基本信息
     private List<AppUserVO> getPublisherList(Set idSet) {
-        List<ServiceInstance> instances = discoveryClient.getInstances("SERVICE-USER");
-        ServiceInstance userService = instances.get(0);
+        String serviceId = "SERVICE-USER";
+//        List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
+//        ServiceInstance userService = instances.get(0);
+        //这里它为什么能够识别？因为你是使用restTemplate来发起调用的，
+        // 然后你可以再CloudConfig中增加负载均衡的配置，使得可以支持这样的方式
         String userServerUrlExecute
                 = "http://"
-                + userService.getHost() +
-                ":"
-                + userService.getPort()
+                + serviceId
                 + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        System.out.println(userServerUrlExecute);
+//        String userServerUrlExecute
+//                = "http://"
+//                + userService.getHost() +
+//                ":"
+//                + userService.getPort()
+//                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
 
 
 //        String userServerUrlExecute

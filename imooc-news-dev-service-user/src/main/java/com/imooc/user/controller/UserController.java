@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,9 +85,11 @@ public class UserController extends BaseController implements UserControllerApi 
         }
         return user;
     }
-
+    @Value("${server.port}")
+    private String myport;
     @Override
     public GraceJSONResult queryByIds(String userIds) {
+        System.out.println("mypost + " + myport);
         //这里的传过来的是一个Set转换成的String，
         if (StringUtils.isBlank(userIds)) {
             return GraceJSONResult.errorCustom(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
