@@ -12,6 +12,7 @@ import com.imooc.pojo.vo.UserAccountInfoVO;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.RedisOperator;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,8 +88,16 @@ public class UserController extends BaseController implements UserControllerApi 
     }
     @Value("${server.port}")
     private String myport;
+
+    @HystrixCommand(fallbackMethod = "queryByIdsFallBack")
     @Override
     public GraceJSONResult queryByIds(String userIds) {
+//        int a = 1 / 0;
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("mypost + " + myport);
         //这里的传过来的是一个Set转换成的String，
         if (StringUtils.isBlank(userIds)) {
@@ -101,6 +110,21 @@ public class UserController extends BaseController implements UserControllerApi 
         for (String userId : userIdList) {
             // 获得用户基本信息
             AppUserVO userVO = getBasicUserInfo(userId);
+            // 添加到publisherList
+            publisherList.add(userVO);
+        }
+
+        return GraceJSONResult.ok(publisherList);
+    }
+
+    public GraceJSONResult queryByIdsFallBack(String userIds) {
+        System.out.println("进入降级方法");
+        List<AppUserVO> publisherList = new ArrayList<>();
+        List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
+        //这里又把String给拆成好几个id了。然后返回这几个id去查询对应的作者
+        for (String userId : userIdList) {
+            // 获得用户基本信息
+            AppUserVO userVO = new AppUserVO();
             // 添加到publisherList
             publisherList.add(userVO);
         }
