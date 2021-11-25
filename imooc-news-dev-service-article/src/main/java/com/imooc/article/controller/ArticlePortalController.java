@@ -2,6 +2,7 @@ package com.imooc.article.controller;
 
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.article.ArticlePortalControllerApi;
+import com.imooc.api.controller.user.UserControllerApi;
 import com.imooc.article.service.ArticlePortalService;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.Article;
@@ -143,6 +144,8 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
     @Resource
     private DiscoveryClient discoveryClient;
+    @Resource
+    private UserControllerApi userControllerApi;
 
     // 发起远程调用，获得用户的基本信息
     private List<AppUserVO> getPublisherList(Set idSet) {
@@ -155,6 +158,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
                 = "http://"
                 + serviceId
                 + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        GraceJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
         System.out.println(userServerUrlExecute);
 //        String userServerUrlExecute
 //                = "http://"
@@ -166,9 +170,9 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
 //        String userServerUrlExecute
 //                = "http://user.imoocnews.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
-        ResponseEntity<GraceJSONResult> responseEntity
-                = restTemplate.getForEntity(userServerUrlExecute, GraceJSONResult.class);
-        GraceJSONResult bodyResult = responseEntity.getBody();
+//        ResponseEntity<GraceJSONResult> responseEntity
+//                = restTemplate.getForEntity(userServerUrlExecute, GraceJSONResult.class);
+//        GraceJSONResult bodyResult = responseEntity.getBody();
         List<AppUserVO> publisherList = null;
         if (bodyResult.getStatus() == 200) {
             //这里返回的是一个list对象，然后再转换成一个Json,再转换回来，虽然这俩是一个对象
