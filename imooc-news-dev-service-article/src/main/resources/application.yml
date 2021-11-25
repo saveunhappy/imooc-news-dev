@@ -108,3 +108,12 @@ ribbon:
   MaxAutoRetriesNextServer: 2   # 切换到下个微服务实例的重试次数
   # 当请求到某个微服务5s，超时后会进行重试，先重试连接自己当前的这个实例
   # 如果当前重试失败1次，则会切换到访问集群中的下一个微服务实例，切换最大为2次
+
+feign:
+  client:
+    config:
+      service-user:
+        loggerLevel: FULL
+logging:
+  level:
+    com.imooc.api.controller.user.UserControllerApi: debug
