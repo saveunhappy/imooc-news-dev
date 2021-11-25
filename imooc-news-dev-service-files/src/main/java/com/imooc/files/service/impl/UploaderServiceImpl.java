@@ -6,9 +6,8 @@ import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.imooc.files.resource.FileResource;
 import com.imooc.files.service.UploaderService;
-import com.imooc.org.n3r.idworker.Sid;
+import org.n3r.idworker.Sid;
 import com.imooc.utils.extend.AliyunResource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

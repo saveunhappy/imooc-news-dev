@@ -1,6 +1,6 @@
-package com.imooc.org.n3r.idworker;
+package org.n3r.idworker;
 
-import com.imooc.org.n3r.idworker.strategy.DefaultWorkerIdStrategy;
+import org.n3r.idworker.strategy.DefaultWorkerIdStrategy;
 
 public class Id {
     private static WorkerIdStrategy workerIdStrategy;

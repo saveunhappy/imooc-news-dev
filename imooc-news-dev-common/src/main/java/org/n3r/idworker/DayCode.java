@@ -1,6 +1,6 @@
-package com.imooc.org.n3r.idworker;
+package org.n3r.idworker;
 
-import com.imooc.org.n3r.idworker.strategy.DayPrefixRandomCodeStrategy;
+import org.n3r.idworker.strategy.DayPrefixRandomCodeStrategy;
 
 public class DayCode {
     static RandomCodeStrategy strategy;

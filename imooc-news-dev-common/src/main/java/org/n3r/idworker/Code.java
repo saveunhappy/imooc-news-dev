@@ -1,6 +1,6 @@
-package com.imooc.org.n3r.idworker;
+package org.n3r.idworker;
 
-import com.imooc.org.n3r.idworker.strategy.DefaultRandomCodeStrategy;
+import org.n3r.idworker.strategy.DefaultRandomCodeStrategy;
 
 public class Code {
     private static RandomCodeStrategy strategy;

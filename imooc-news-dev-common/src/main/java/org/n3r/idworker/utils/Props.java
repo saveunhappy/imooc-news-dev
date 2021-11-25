@@ -1,4 +1,4 @@
-package com.imooc.org.n3r.idworker.utils;
+package org.n3r.idworker.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.Properties;
 
 import static java.io.File.separator;
-import static com.imooc.org.n3r.idworker.utils.Serializes.closeQuietly;
+import static org.n3r.idworker.utils.Serializes.closeQuietly;
 
 public class Props {
     static Logger log = LoggerFactory.getLogger(Props.class);

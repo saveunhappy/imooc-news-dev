@@ -1,4 +1,4 @@
-package com.imooc.org.n3r.idworker.utils;
+package org.n3r.idworker.utils;
 
 /**
  * This utility provides methods to either convert an IPv4 address to its long format or a 32bit dotted format.

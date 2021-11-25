@@ -6,7 +6,7 @@ import com.imooc.article.service.ArticlePortalService;
 import com.imooc.article.service.CommentPortalService;
 import com.imooc.article.mapper.CommentsMapper;
 import com.imooc.article.mapper.CommentsMapperCustom;
-import com.imooc.org.n3r.idworker.Sid;
+import org.n3r.idworker.Sid;
 import com.imooc.pojo.Comments;
 import com.imooc.pojo.vo.ArticleDetailVO;
 import com.imooc.pojo.vo.CommentsVO;

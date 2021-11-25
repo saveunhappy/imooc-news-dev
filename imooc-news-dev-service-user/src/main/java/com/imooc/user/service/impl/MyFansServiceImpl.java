@@ -3,28 +3,22 @@ package com.imooc.user.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.imooc.api.service.BaseService;
 import com.imooc.enums.Sex;
-import com.imooc.enums.UserStatus;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
-import com.imooc.org.n3r.idworker.Sid;
+import org.n3r.idworker.Sid;
 import com.imooc.pojo.AppUser;
 import com.imooc.pojo.Fans;
-import com.imooc.pojo.bo.UpdateUserInfoBO;
 import com.imooc.pojo.vo.RegionRatioVO;
-import com.imooc.user.mapper.AppUserMapper;
 import com.imooc.user.mapper.FansMapper;
 import com.imooc.user.service.MyFansService;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -1,13 +1,12 @@
 package com.imooc.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.imooc.admin.mapper.AdminUserMapper;
 import com.imooc.admin.service.AdminUserService;
 import com.imooc.api.service.BaseService;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;
-import com.imooc.org.n3r.idworker.Sid;
+import org.n3r.idworker.Sid;
 import com.imooc.pojo.AdminUser;
 import com.imooc.pojo.bo.NewAdminBO;
 import com.imooc.utils.PagedGridResult;
