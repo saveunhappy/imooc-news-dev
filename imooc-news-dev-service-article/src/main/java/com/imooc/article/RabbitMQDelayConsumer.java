@@ -1,4 +1,4 @@
-package com.imooc.article.mq;
+package com.imooc.article;
 
 import com.imooc.api.config.RabbitMQDelayConfig;
 import com.imooc.article.service.ArticleService;

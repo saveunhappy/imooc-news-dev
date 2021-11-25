@@ -1,14 +1,6 @@
 package com.imooc.article.html;
 
-import com.imooc.api.config.RabbitMQConfig;
-import com.imooc.api.config.RabbitMQDelayConfig;
-import com.imooc.article.controller.ArticleHTMLComponent;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.Date;
 
 @Component
 public class RabbitMQDelayConsumer {

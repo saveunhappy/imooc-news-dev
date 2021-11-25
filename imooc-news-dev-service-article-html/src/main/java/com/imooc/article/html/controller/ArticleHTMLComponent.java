@@ -1,4 +1,4 @@
-package com.imooc.article.controller;
+package com.imooc.article.html.controller;
 
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.ResponseStatusEnum;

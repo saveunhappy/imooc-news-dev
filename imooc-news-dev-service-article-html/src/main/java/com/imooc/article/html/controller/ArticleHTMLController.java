@@ -1,4 +1,4 @@
-package com.imooc.article.controller;
+package com.imooc.article.html.controller;
 
 import com.imooc.api.controller.article.ArticleHTMLControllerApi;
 import com.imooc.exception.GraceException;

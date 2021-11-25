@@ -1,4 +1,4 @@
-package com.imooc.article.controller;
+package com.imooc.eureka.controller;
 
 import com.imooc.api.controller.user.HelloControllerApi;
 import com.imooc.grace.result.GraceJSONResult;
@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController implements HelloControllerApi {
-    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
-    public GraceJSONResult hello(){
+    final static Logger logger = LoggerFactory.getLogger(HelloController.class);
+
+    public Object hello() {
         return GraceJSONResult.ok();
     }
+
 }
