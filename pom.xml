@@ -17,6 +17,7 @@
         <module>imooc-news-dev-service-article</module>
         <module>imooc-news-dev-service-article-html</module>
         <module>springcloud-eureka</module>
+        <module>springclout-eureka-cluster</module>
     </modules>
 
     <packaging>pom</packaging>
