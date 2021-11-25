@@ -154,12 +154,12 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 //        ServiceInstance userService = instances.get(0);
         //这里它为什么能够识别？因为你是使用restTemplate来发起调用的，
         // 然后你可以再CloudConfig中增加负载均衡的配置，使得可以支持这样的方式
-        String userServerUrlExecute
-                = "http://"
-                + serviceId
-                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+//        String userServerUrlExecute
+//                = "http://"
+//                + serviceId
+//                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
         GraceJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
-        System.out.println(userServerUrlExecute);
+//        System.out.println(userServerUrlExecute);
 //        String userServerUrlExecute
 //                = "http://"
 //                + userService.getHost() +
@@ -180,6 +180,8 @@ public class ArticlePortalController extends BaseController implements ArticlePo
             String userJson = JsonUtils.objectToJson(bodyResult.getData());
             publisherList = JsonUtils.jsonToList(userJson, AppUserVO.class);
 //            publisherList = (List<AppUserVO>) bodyResult.getData();
+        }else{
+            publisherList = new ArrayList<>();
         }
         return publisherList;
     }

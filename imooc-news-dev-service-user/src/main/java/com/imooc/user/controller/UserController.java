@@ -12,6 +12,7 @@ import com.imooc.pojo.vo.UserAccountInfoVO;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.RedisOperator;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,11 +30,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@DefaultProperties(defaultFallback = "defaultFallback")
 public class UserController extends BaseController implements UserControllerApi {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Resource
     private UserService userService;
-
+    public GraceJSONResult defaultFallback(){
+        System.out.println("全局降级");
+        return GraceJSONResult.errorCustom(ResponseStatusEnum.SYSTEM_ERROR_GLOBAL);
+    }
     @Override
     public GraceJSONResult getUserInfo(String userId) {
         //0.判断用户参数不能为空
@@ -89,7 +94,7 @@ public class UserController extends BaseController implements UserControllerApi 
     @Value("${server.port}")
     private String myport;
 
-    @HystrixCommand(fallbackMethod = "queryByIdsFallBack")
+    @HystrixCommand//(fallbackMethod = "queryByIdsFallBack")
     @Override
     public GraceJSONResult queryByIds(String userIds) {
 //        int a = 1 / 0;
