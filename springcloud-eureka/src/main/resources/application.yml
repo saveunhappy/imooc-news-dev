@@ -29,9 +29,9 @@ eureka:
     hostname: eureka
   client:
     # 是否要把当前的eureka server注册到自己
-    register-with-eureka: false
+    register-with-eureka: true
     # 从注册中心获得检索服务实例，server没有必要，直接false即可
-    fetch-registry: false
+    fetch-registry: true
     # 单实例配置自己的服务地址，高可用集群则配置多个地址
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

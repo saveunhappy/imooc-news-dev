@@ -98,11 +98,11 @@ public class UserController extends BaseController implements UserControllerApi 
     @Override
     public GraceJSONResult queryByIds(String userIds) {
 //        int a = 1 / 0;
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         System.out.println("mypost + " + myport);
         //这里的传过来的是一个Set转换成的String，
         if (StringUtils.isBlank(userIds)) {

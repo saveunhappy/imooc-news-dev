@@ -1,0 +1,49 @@
+############################################################
+#
+# eureka 注册中心
+# web访问端口号  约定：7000
+#
+############################################################
+server:
+  port: 7070
+  tomcat:
+    uri-encoding: UTF-8
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  application:
+    name: springcloud-zuul-server
+  redis:
+    database: 0
+    host: 47.100.235.50
+    port: 6379
+    password: 123456
+#eureka:
+#  instance:
+#    # eureka 实例的hostname，可以是hostname，也可以自定义配置hostname
+#    hostname: eureka
+#  client:
+#    # 是否要把当前的eureka server注册到自己
+#    register-with-eureka: false
+#    # 从注册中心获得检索服务实例，server没有必要，直接false即可
+#    fetch-registry: false
+#    # 单实例配置自己的服务地址，高可用集群则配置多个地址
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#  server:
+#    enable-self-preservation: false   # 关闭eureka的自我保护功能
+#    eviction-interval-timer-in-ms: 5000   # 清理无效节点的时间，可以缩短为5s，默认60s
+# 路由规则: http://[网关地址]:[端口号]/[prefix]/[微服务实例id]/[请求地址路径]
+zuul:
+  routes:
+    # 由于路由id和微服务实例id相同，我们可以简化转发的配置
+    #service-article: /service-article/**
+    service-article:                  # 配置微服务的路由id，微服务的实例id
+      path: /service-article/**       # 请求路径(前缀)
+      service-id: service-article     # 请求转发的微服务实例id
+      url: http://192.168.92.1:8001    # 请求转发到指定的微服务所在的ip地址
+  prefix: /api
