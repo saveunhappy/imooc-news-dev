@@ -73,10 +73,12 @@ public class UserServiceImpl implements UserService {
      * 查询的时候没事，但是你更新的时候，得保证数据库和redis一致的情况
      * 首先，你不能让用户从redis中查询到老的数据，那么，直接把redis中老数据
      * 的key给删除，然后你修改完之后，再把修改之后的数据放到redis中去，
-     * 然后又有一个问题了，你写入数据库的时候，又有用户来查询了，然后你还没写入
-     * 打到数据库里面了，还是查询的老数据，那就进行睡眠一下，这个时候已经到数据库里面了
+     * 然后又有一个问题了，你写入数据库的时候，又有用户来查询了，然后你还没写入到数据库，那些人
+     * 打到数据库里面了，还是查询的老数据，又放到redis中老的数据了，
+     * 那就进行睡眠一下，这个时候已经到数据库里面了
      * 然后再删除一下redis中的key,这个时候用户再来，那就是再从数据库中查询了，放到了redis中去
-     * 更新就是得这样
+     * 更新就是得这样，
+     * 最后set之后又del就是防止老的数据又设置到了redis中去了
      */
     @Override
     public void updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
