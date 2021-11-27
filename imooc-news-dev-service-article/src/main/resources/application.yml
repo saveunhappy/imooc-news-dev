@@ -115,8 +115,8 @@ feign:
     config:
       service-user:
         loggerLevel: FULL
-  hystrix:
-    enabled: true
+#  hystrix:
+#    enabled: true
 logging:
   level:
     com.imooc.api.controller.user.UserControllerApi: debug

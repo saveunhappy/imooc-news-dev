@@ -1,11 +1,13 @@
 package com.imooc.api;
 
+import com.imooc.api.controller.user.UserControllerApi;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.vo.AppUserVO;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.RedisOperator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -105,13 +107,15 @@ public class BaseController {
         }
         return Integer.valueOf(countStr);
     }
-
+    @Autowired
+    private UserControllerApi userControllerApi;
     public List<AppUserVO> getBasicUserList(Set idSet) {
-        String userServerUrlExecute
-                = "http://user.imoocnews.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
-        ResponseEntity<GraceJSONResult> responseEntity
-                = restTemplate.getForEntity(userServerUrlExecute, GraceJSONResult.class);
-        GraceJSONResult bodyResult = responseEntity.getBody();
+        GraceJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
+//        String userServerUrlExecute
+//                = "http://user.imoocnews.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+//        ResponseEntity<GraceJSONResult> responseEntity
+//                = restTemplate.getForEntity(userServerUrlExecute, GraceJSONResult.class);
+//        GraceJSONResult bodyResult = responseEntity.getBody();
         List<AppUserVO> userVOList = null;
         if (bodyResult.getStatus() == 200) {
             String userJson = JsonUtils.objectToJson(bodyResult.getData());

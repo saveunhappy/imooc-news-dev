@@ -159,15 +159,6 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 //                + serviceId
 //                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
         GraceJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
-//        System.out.println(userServerUrlExecute);
-//        String userServerUrlExecute
-//                = "http://"
-//                + userService.getHost() +
-//                ":"
-//                + userService.getPort()
-//                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
-
-
 //        String userServerUrlExecute
 //                = "http://user.imoocnews.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
 //        ResponseEntity<GraceJSONResult> responseEntity

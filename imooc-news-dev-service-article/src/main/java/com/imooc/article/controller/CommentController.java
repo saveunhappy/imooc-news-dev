@@ -58,7 +58,6 @@ public class CommentController extends BaseController implements CommentControll
 
     @Override
     public GraceJSONResult mng(String writerId, Integer page, Integer pageSize) {
-
         if (page == null) {
             page = COMMON_START_PAGE;
         }
