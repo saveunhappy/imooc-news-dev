@@ -28,6 +28,8 @@ public class BaseController {
     public RedisOperator redis;
     @Resource
     public RestTemplate restTemplate;
+    @Resource
+    private UserControllerApi userControllerApi;
     public static final String MOBILE_SMSCODE = "mobile:smscode";
     public static final String REDIS_USER_TOKEN = "redis_user_token";
     public static final String REDIS_USER_INFO = "redis_user_info";
@@ -107,8 +109,7 @@ public class BaseController {
         }
         return Integer.valueOf(countStr);
     }
-    @Autowired
-    private UserControllerApi userControllerApi;
+
     public List<AppUserVO> getBasicUserList(Set idSet) {
         GraceJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
 //        String userServerUrlExecute

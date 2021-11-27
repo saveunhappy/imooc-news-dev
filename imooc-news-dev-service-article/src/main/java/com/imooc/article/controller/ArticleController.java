@@ -3,6 +3,8 @@ package com.imooc.article.controller;
 import com.imooc.api.BaseController;
 import com.imooc.api.config.RabbitMQConfig;
 import com.imooc.api.controller.article.ArticleControllerApi;
+import com.imooc.api.controller.article.ArticleHTMLControllerApi;
+import com.imooc.api.controller.article.ArticlePortalControllerApi;
 import com.imooc.article.service.ArticleService;
 import com.imooc.enums.ArticleCoverType;
 import com.imooc.enums.ArticleReviewStatus;
@@ -139,9 +141,9 @@ public class ArticleController extends BaseController implements ArticleControll
                 //存储到对应的文章进行关联保存
                 articleService.updateArticleToGridFS(articleId, articleMongoId);
                 //调用消费端执行下载html
-//                doDownloadArticleHTML(articleId,articleMongoId);
+                doDownloadArticleHTML(articleId,articleMongoId);
                 //发送消息到mq队列，让消费者监听并且执行下载html
-                doDownloadArticleHTMLByMQ(articleId,articleMongoId);
+//                doDownloadArticleHTMLByMQ(articleId,articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("创建文章出错");
@@ -157,10 +159,13 @@ public class ArticleController extends BaseController implements ArticleControll
                 "article.download.do",
                 articleId +"," + articleMongoId);
     }
+    @Resource
+    private ArticleHTMLControllerApi articleHTMLControllerApi;
     private void doDownloadArticleHTML(String articleId, String articleMongoId) {
-        String url = "http://html.imoocnews.com:8002/article/html/download?" +
-                "articleId=" + articleId + "&articleMongoId=" + articleMongoId;
-        Integer status = restTemplate.getForObject(url, Integer.class);
+//        String url = "http://html.imoocnews.com:8002/article/html/download?" +
+//                "articleId=" + articleId + "&articleMongoId=" + articleMongoId;
+        Integer status = articleHTMLControllerApi.download(articleId,articleMongoId);
+//        Integer status = restTemplate.getForObject(url, Integer.class);
         if (HttpStatus.OK.value() == status) {
             return;
         }
@@ -207,19 +212,23 @@ public class ArticleController extends BaseController implements ArticleControll
         ArticleDetailVO detailVO = getArticleDetail(articleId);
         Map<String, Object> map = new HashMap<>();
         map.put("articleDetail", detailVO);
+        //这个content就是生成的html代码，
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
         InputStream inputStream = IOUtils.toInputStream(content);
+        //这个就是返回的mongoId
         ObjectId objectId = gridFSBucket.uploadFromStream(detailVO.getId() + ".html", inputStream);
         return objectId.toString();
     }
-
+    @Resource
+    private ArticlePortalControllerApi articlePortalControllerApi;
     //发起远程调用rest,获得文章详情数据
     public ArticleDetailVO getArticleDetail(String articleId) {
-        String url
-                = "http://www.imoocnews.com:8001/portal/article/detail?articleId=" + articleId;
-        ResponseEntity<GraceJSONResult> responseEntity
-                = restTemplate.getForEntity(url, GraceJSONResult.class);
-        GraceJSONResult bodyResult = responseEntity.getBody();
+//        String url
+//                = "http://www.imoocnews.com:8001/portal/article/detail?articleId=" + articleId;
+//        ResponseEntity<GraceJSONResult> responseEntity
+//                = restTemplate.getForEntity(url, GraceJSONResult.class);
+        GraceJSONResult bodyResult = articlePortalControllerApi.detail(articleId);
+//        GraceJSONResult bodyResult = responseEntity.getBody();
         ArticleDetailVO detailVO = null;
         if (bodyResult.getStatus() == 200) {
             String detailJson = JsonUtils.objectToJson(bodyResult.getData());
