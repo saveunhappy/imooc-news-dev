@@ -23,6 +23,8 @@ imooc-news-dev-service-article/src/main/resources/application-prod.yml
 
 imooc-news-dev-service-article-html/src/main/resources/application-dev.yml
 imooc-news-dev-service-article-html/src/main/resources/application-prod.yml
+imooc-news-dev-service-search/src/main/resources/application-dev.yml
+imooc-news-dev-service-search/src/main/resources/application-prod.yml
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

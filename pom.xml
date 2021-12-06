@@ -19,6 +19,7 @@
         <module>springcloud-eureka</module>
         <module>springclout-eureka-cluster</module>
         <module>springcloud-zuul-server</module>
+        <module>imooc-news-dev-service-search</module>
     </modules>
 
     <packaging>pom</packaging>
