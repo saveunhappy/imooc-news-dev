@@ -3,6 +3,7 @@ package com.imooc.admin.controller;
 import com.imooc.admin.service.AdminUserService;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.admin.AdminMngControllerApi;
+import com.imooc.api.controller.files.FileUploaderControllerApi;
 import com.imooc.enums.FaceVerifyType;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
@@ -37,6 +38,9 @@ public class AdminMngController extends BaseController implements AdminMngContro
     private FaceVerifyUtils faceVerifyUtils;
     @Resource
     private CompareFaceUtils compareFaceUtils;
+    @Resource
+    private FileUploaderControllerApi fileUploaderControllerApi;
+
     @Override
     public GraceJSONResult adminLogin(@Valid AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) {
 
@@ -129,7 +133,7 @@ public class AdminMngController extends BaseController implements AdminMngContro
     }
 
     @Override
-    public GraceJSONResult adminFaceLogin(AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) {
+    public GraceJSONResult adminFaceLogin(AdminLoginBO adminLoginBO, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //0.判断用户名和人脸信息不能为空
         String username = adminLoginBO.getUsername();
         if(StringUtils.isBlank(username)){
@@ -146,11 +150,13 @@ public class AdminMngController extends BaseController implements AdminMngContro
 
         //2.请求文件服务，获取人脸数据的base64数据
         String fileServerExecute = "http://files.imoocnews.com:8004/fs/readFace64InGridFS?faceId=" + adminFaceId;
-        ResponseEntity<GraceJSONResult> responseEntity = restTemplate.getForEntity(fileServerExecute, GraceJSONResult.class);
-        GraceJSONResult body = responseEntity.getBody();
-        assert body != null;
-        String base64DB = (String)body.getData();
+//        ResponseEntity<GraceJSONResult> responseEntity = restTemplate.getForEntity(fileServerExecute, GraceJSONResult.class);
+//        GraceJSONResult body = responseEntity.getBody();
+//        assert body != null;
+        GraceJSONResult graceJSONResult = fileUploaderControllerApi.readFace64InGridFS(adminFaceId);
 
+//        String base64DB = (String)body.getData();
+        String base64DB = graceJSONResult.getData().toString();
         //3.调用阿里ai进行人脸对比识别，判断可信度，从而实现人脸登录
         boolean result = compareFaceUtils.faceVerify(tempFace64,base64DB,60F);
 //        boolean result = faceVerifyUtils.faceVerify(

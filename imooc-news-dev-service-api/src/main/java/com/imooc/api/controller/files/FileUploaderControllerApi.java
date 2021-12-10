@@ -1,9 +1,11 @@
 package com.imooc.api.controller.files;
 
+import com.imooc.api.config.MyServiceList;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.pojo.bo.NewAdminBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Api(value = "文件上传的Controller",tags = {"文件上传的Controller"})
 @RequestMapping("fs")
+@FeignClient("service-files")
 public interface FileUploaderControllerApi {
     /**
      * 上传单文件
@@ -40,12 +43,10 @@ public interface FileUploaderControllerApi {
     GraceJSONResult uploadToGridFS(@RequestBody NewAdminBO newAdminBO)throws Exception;
 
     @GetMapping("/readInGridFS")
-    void readInGridFS(String faceId,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response)throws Exception;
+    void readInGridFS(@RequestParam String faceId,
+                      @RequestParam HttpServletRequest request,
+                      @RequestParam  HttpServletResponse response)throws Exception;
     @GetMapping("/readFace64InGridFS")
-    GraceJSONResult readFace64InGridFS(String faceId,
-                      HttpServletRequest request,
-                      HttpServletResponse response)throws Exception;
+    GraceJSONResult readFace64InGridFS(@RequestParam("faceId") String faceId)throws Exception;
 
 }

@@ -50,5 +50,5 @@ public interface AdminMngControllerApi {
     @PostMapping("/adminFaceLogin")
     GraceJSONResult adminFaceLogin(@RequestBody AdminLoginBO adminLoginBO,
                                 HttpServletRequest request,
-                                HttpServletResponse response );
+                                HttpServletResponse response ) throws Exception;
 }

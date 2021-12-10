@@ -139,7 +139,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
     }
 
     @Override
-    public GraceJSONResult readFace64InGridFS(String faceId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public GraceJSONResult readFace64InGridFS(String faceId) throws Exception {
         //0.获得gridfs中人脸文件
         File myFace = readGridFSByFaceId(faceId);
         //1.转换人脸为base64

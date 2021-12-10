@@ -41,7 +41,7 @@ public class PassportController extends BaseController implements PassportContro
         //生成随机验证码并且发送短信
         String random = (int) ((Math.random() * 9 + 1) * 100000) + "";
         //TODO 注意，这里是写死成自己的了,如果要正常使用，还是要写成前端传过来的。
-//        smsUtils.sendSMS(MyInfo.getMobile(), random);
+        smsUtils.sendSMS(MyInfo.getMobile(), random);
         //把验证码存入redis，用于后序验证
         redis.set(MOBILE_SMSCODE + ":" + mobile, random, 30 * 60);
         return GraceJSONResult.ok();
