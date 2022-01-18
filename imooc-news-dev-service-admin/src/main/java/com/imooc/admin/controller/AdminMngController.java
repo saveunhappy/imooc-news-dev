@@ -50,6 +50,9 @@ public class AdminMngController extends BaseController implements AdminMngContro
         if(admin == null){
             return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
         }
+        //去校验，加密之后的密码是不是一样的。
+        //这个是进行加密的
+        //adminUser.setPassword(BCrypt.hashpw(newAdminBO.getPassword(), BCrypt.gensalt()));
         boolean checkpw = BCrypt.checkpw(adminLoginBO.getPassword(), admin.getPassword());
         if(checkpw){
             doLoginSettings(admin,request,response);
