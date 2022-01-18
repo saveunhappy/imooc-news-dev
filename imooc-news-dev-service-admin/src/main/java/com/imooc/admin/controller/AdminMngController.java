@@ -3,7 +3,6 @@ package com.imooc.admin.controller;
 import com.imooc.admin.service.AdminUserService;
 import com.imooc.api.BaseController;
 import com.imooc.api.controller.admin.AdminMngControllerApi;
-import com.imooc.enums.FaceVerifyType;
 import com.imooc.exception.GraceException;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
@@ -46,15 +45,18 @@ public class AdminMngController extends BaseController implements AdminMngContro
         if(admin == null){
             return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
         }
+        //去校验，加密之后的密码是不是一样的。
+        //这个是进行加密的
+        //adminUser.setPassword(BCrypt.hashpw(newAdminBO.getPassword(), BCrypt.gensalt()));
         boolean checkpw = BCrypt.checkpw(adminLoginBO.getPassword(), admin.getPassword());
         if(checkpw){
+            //校验成功后，把token,id,name给存到cookie中去。
             doLoginSettings(admin,request,response);
             return GraceJSONResult.ok();
         }else {
             return GraceJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
         }
     }
-
     @Override
     public GraceJSONResult adminIsExist(String username) {
         checkAdminExist(username);
@@ -143,14 +145,13 @@ public class AdminMngController extends BaseController implements AdminMngContro
         //1.从数据库中查询出FaceId
         AdminUser adminUser = adminUserService.queryAdminUserByUsername(username);
         String adminFaceId = adminUser.getFaceId();
-
         //2.请求文件服务，获取人脸数据的base64数据
         String fileServerExecute = "http://files.imoocnews.com:8004/fs/readFace64InGridFS?faceId=" + adminFaceId;
+//        GraceJSONResult forObject = restTemplate.getForObject(fileServerExecute, GraceJSONResult.class);
         ResponseEntity<GraceJSONResult> responseEntity = restTemplate.getForEntity(fileServerExecute, GraceJSONResult.class);
         GraceJSONResult body = responseEntity.getBody();
         assert body != null;
         String base64DB = (String)body.getData();
-
         //3.调用阿里ai进行人脸对比识别，判断可信度，从而实现人脸登录
         boolean result = compareFaceUtils.faceVerify(tempFace64,base64DB,60F);
 //        boolean result = faceVerifyUtils.faceVerify(

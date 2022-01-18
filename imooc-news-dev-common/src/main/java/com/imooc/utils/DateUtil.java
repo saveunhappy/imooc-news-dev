@@ -200,7 +200,7 @@ public class DateUtil {
      * @param isoString
      * @param field the time field.
      * @param up Indicates if rolling up or rolling down the field value.
-     * @param expanded use formating char's
+     * @param fmt use formating char's
      * @exception ParseException if an unknown field value is given.
      */
     public static final String roll(String isoString, String fmt, int field,
@@ -273,7 +273,7 @@ public class DateUtil {
     }
 
     /** java.util.Date
-     * @param dateText  
+     * @param dateString
      * @param format  
      * @return
      */
